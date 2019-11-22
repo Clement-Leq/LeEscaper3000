@@ -44,7 +44,7 @@ public class Jeu extends BasicGame{
 		idle_RIGHT = getAnimationIdle_Right();
 		anim_RIGHT = getAnimationRight();
 		anim_LEFT = getAnimationLeft();
-		direction = Direction.idleLEFT;
+		direction = Direction.LEFT;
 	}
 	
 	private Animation getAnimationidle_LEFT() {
@@ -77,22 +77,17 @@ public class Jeu extends BasicGame{
 	}
 	public void update(GameContainer gc, int i) throws SlickException {
 		Input input = gc.getInput();
+		img_caseY += 7;
 		if(input.isKeyDown(Input.KEY_A)) {
 			direction = Direction.LEFT;
 			img_caseX -= 2;
 			anim_LEFT.update((long) (i/2.5));
-				/*direction = Direction.idleLEFT;
-				idle_LEFT.update((long) (i/2.5));*/
-
 			AncienneDirection = direction;
 		}
 		else if(input.isKeyDown(Input.KEY_D)) {
 			direction = Direction.RIGHT;
 			img_caseX += 2;
 			anim_RIGHT.update((long) (i/2.5));
-				/*direction = Direction.idleRIGHT;
-				idle_RIGHT.update((long) (i/2.5));*/
-
 			AncienneDirection = direction;
 		}
 		else {
