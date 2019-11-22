@@ -2,7 +2,7 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.tiled.TiledMap;
 
 enum Direction{
-	idleRIGHT, idleLEFT, RIGHT, LEFT
+	idleRIGHT, idleLEFT, RIGHT, LEFT, JUMPRIGHT, JUMPLEFT
 }
 
 public class Jeu extends BasicGame{
@@ -13,6 +13,8 @@ public class Jeu extends BasicGame{
 	private Animation idle_RIGHT;
 	private Animation anim_RIGHT;
 	private Animation anim_LEFT;
+	private Animation jump_RIGHT;
+	private Animation jump_LEFT;
 	private Direction direction;
 	private Direction AncienneDirection;
 	
@@ -33,7 +35,12 @@ public class Jeu extends BasicGame{
 			break;
 		case idleRIGHT: idle_RIGHT.draw(posX, posY);
 		break;
+		case JUMPRIGHT: jump_RIGHT.draw(posX, posY);
+			break;
+		case JUMPLEFT: jump_LEFT.draw(posX, posY);
+			break;
 		}
+		
 	}
 
 	public void init(GameContainer gc) throws SlickException {
@@ -44,9 +51,25 @@ public class Jeu extends BasicGame{
 		idle_RIGHT = getAnimationIdle_Right();
 		anim_RIGHT = getAnimationRight();
 		anim_LEFT = getAnimationLeft();
+		jump_RIGHT = getAnimationJumpRight();
+		jump_LEFT = getAnimationJumpLeft();
 		direction = Direction.LEFT;
+		AncienneDirection = direction;
 	}
-	
+	private Animation getAnimationJumpRight() {
+		Animation anim = new Animation(false);
+		for(int x = 3; x < 11; x++) {
+			anim.addFrame(toast.getSubImage(x*64, 6*64, 64, 64), 50);
+		}
+		return anim;
+	}
+	private Animation getAnimationJumpLeft() {
+		Animation anim = new Animation(false);
+		for(int x = 7; x > 1; x--) {
+			anim.addFrame(toast.getSubImage(x*64, 2*64, 64, 64), 50);
+		}
+		return anim;
+	}
 	private Animation getAnimationidle_LEFT() {
 		Animation anim = new Animation(false);
 		for(int x = 0; x < 2; x++) {
@@ -77,17 +100,11 @@ public class Jeu extends BasicGame{
 	}
 	public void update(GameContainer gc, int i) throws SlickException {
 		Input input = gc.getInput();
-		img_caseY += 7;
+		//img_caseY += 7;
 		if(input.isKeyDown(Input.KEY_A)) {
 			direction = Direction.LEFT;
 			img_caseX -= 2;
 			anim_LEFT.update((long) (i/2.5));
-			AncienneDirection = direction;
-		}
-		else if(input.isKeyDown(Input.KEY_D)) {
-			direction = Direction.RIGHT;
-			img_caseX += 2;
-			anim_RIGHT.update((long) (i/2.5));
 			AncienneDirection = direction;
 		}
 		else {
@@ -95,11 +112,30 @@ public class Jeu extends BasicGame{
 				direction = Direction.idleLEFT;
 				idle_LEFT.update((long) (i/2.5));
 			}
+		}
+		if(input.isKeyDown(Input.KEY_D)) {
+			direction = Direction.RIGHT;
+			img_caseX += 2;
+			anim_RIGHT.update((long) (i/2.5));
+			AncienneDirection = direction;
+		}
+		else {
 			if(AncienneDirection == Direction.RIGHT) {
 				direction = Direction.idleRIGHT;
 				idle_RIGHT.update((long) (i/2.5));
 			}
 		}
+		if(input.isKeyDown(Input.KEY_SPACE)) {
+			if(AncienneDirection == Direction.LEFT) {
+				direction = Direction.JUMPLEFT;
+				jump_LEFT.update((long) (i/1.8));
+			}
+			else if(AncienneDirection == Direction.RIGHT) {
+				direction = Direction.JUMPRIGHT;
+				jump_RIGHT.update((long) (i/1.8));
+			}
+		}
+		
 				
 	}
 
