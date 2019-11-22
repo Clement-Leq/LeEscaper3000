@@ -128,11 +128,15 @@ public class Jeu extends BasicGame{
 		if(input.isKeyDown(Input.KEY_SPACE)) {
 			if(AncienneDirection == Direction.LEFT) {
 				direction = Direction.JUMPLEFT;
-				jump_LEFT.update((long) (i/1.8));
+				img_caseY -= 5;
+				jump_LEFT.update((long) (i/2.5));
+				img_caseY += 5;
 			}
 			else if(AncienneDirection == Direction.RIGHT) {
 				direction = Direction.JUMPRIGHT;
-				jump_RIGHT.update((long) (i/1.8));
+				img_caseY -= 5;
+				jump_RIGHT.update((long) (i/2.5));
+				img_caseY += 5;
 			}
 		}
 		
