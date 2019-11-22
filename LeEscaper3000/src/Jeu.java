@@ -2,7 +2,7 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.tiled.TiledMap;
 
 enum Direction{
-	idleLEFT, RIGHT, LEFT
+	idleRIGHT, idleLEFT, RIGHT, LEFT
 }
 
 public class Jeu extends BasicGame{
@@ -14,6 +14,7 @@ public class Jeu extends BasicGame{
 	private Animation anim_RIGHT;
 	private Animation anim_LEFT;
 	private Direction direction;
+	private Direction AncienneDirection;
 	
 	public Jeu(String title) {
 		super(title);
@@ -28,8 +29,10 @@ public class Jeu extends BasicGame{
 			break;
 		case LEFT: anim_LEFT.draw(posX, posY);
 			break;
-		default: idle_LEFT.draw(posX, posY);
+		case idleLEFT: idle_LEFT.draw(posX, posY);
 			break;
+		case idleRIGHT: idle_RIGHT.draw(posX, posY);
+		break;
 		}
 	}
 
@@ -38,6 +41,7 @@ public class Jeu extends BasicGame{
 		img_caseX = 25;
 		img_caseY = 300;
 		idle_LEFT = getAnimationidle_LEFT();
+		idle_RIGHT = getAnimationIdle_Right();
 		anim_RIGHT = getAnimationRight();
 		anim_LEFT = getAnimationLeft();
 		direction = Direction.idleLEFT;
@@ -64,28 +68,44 @@ public class Jeu extends BasicGame{
 		}
 		return anim;
 	}
+	private Animation getAnimationIdle_Right() {
+		Animation anim = new Animation(false);
+		for(int x = 9; x < 11; x++) {
+			anim.addFrame(toast.getSubImage(x*64, 4*64, 64, 64), 50);
+		}
+		return anim;
+	}
 	public void update(GameContainer gc, int i) throws SlickException {
 		Input input = gc.getInput();
-		
-		
 		if(input.isKeyDown(Input.KEY_A)) {
 			direction = Direction.LEFT;
 			img_caseX -= 2;
 			anim_LEFT.update((long) (i/2.5));
+				/*direction = Direction.idleLEFT;
+				idle_LEFT.update((long) (i/2.5));*/
+
+			AncienneDirection = direction;
 		}
-		else {
-			direction = Direction.idleLEFT;
-			idle_LEFT.update((long) (i/2.5));
-		}
-		if(input.isKeyDown(Input.KEY_D)) {
+		else if(input.isKeyDown(Input.KEY_D)) {
 			direction = Direction.RIGHT;
 			img_caseX += 2;
 			anim_RIGHT.update((long) (i/2.5));
+				/*direction = Direction.idleRIGHT;
+				idle_RIGHT.update((long) (i/2.5));*/
+
+			AncienneDirection = direction;
 		}
 		else {
-			direction = Direction.RIGHT;
-			idle_RIGHT.update((long) (i/2.5));
+			if(AncienneDirection == Direction.LEFT) {
+				direction = Direction.idleLEFT;
+				idle_LEFT.update((long) (i/2.5));
+			}
+			if(AncienneDirection == Direction.RIGHT) {
+				direction = Direction.idleRIGHT;
+				idle_RIGHT.update((long) (i/2.5));
+			}
 		}
+				
 	}
 
 }
