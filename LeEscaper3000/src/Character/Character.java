@@ -20,7 +20,7 @@ public class Character {
 	
 	public Character() {
 		super();
-	}
+	}	
 	
 	public void renderCharacter(GameContainer gc, Graphics grphcs) {
 		int posX = img_caseX;
@@ -34,7 +34,7 @@ public class Character {
 		case idleLEFT: idle_LEFT.draw(posX, posY);
 			break;
 		case idleRIGHT: idle_RIGHT.draw(posX, posY);
-		break;
+			break;
 		case JUMPRIGHT: jump_RIGHT.draw(posX, posY);
 			break;
 		case JUMPLEFT: jump_LEFT.draw(posX, posY);
@@ -50,25 +50,25 @@ public class Character {
 		}
 		img_caseX = 25;
 		img_caseY = 300;
-		idle_LEFT = getAnimation(0, 2, 0);
-		idle_RIGHT = getAnimation(9, 11, 4);
-		anim_RIGHT = getAnimation(7, 11 ,5);
-		anim_LEFT = getAnimation(0, 4, 1);
-		jump_RIGHT = getAnimation(3, 11, 6);
-		jump_LEFT = getAnimationJumpLeft(7, 1, 2);
+		idle_LEFT = getAnimation(1, -1, 0);
+		idle_RIGHT = getAnimation(10, 8, 4);
+		anim_RIGHT = getAnimation(10, 6 ,5);
+		anim_LEFT = getAnimation(3, 0, 1);
+		jump_RIGHT = getAnimation(10 , 3, 6);
+		jump_LEFT = getAnimationJumpLeft(1, 7, 2);
 		direction = Direction.LEFT;
 		AncienneDirection = direction;
 	}
 	private Animation getAnimation(int dep, int max, int rowY) {
 		Animation anim = new Animation(false);
-		for(int x = dep; x < max; x++) {
+		for(int x = dep; x > max; x--) {
 			anim.addFrame(toast.getSubImage(x*64, rowY*64, 64, 64), 50);
 		}
 		return anim;
 	}
 	private Animation getAnimationJumpLeft(int dep, int max, int rowY) {
 		Animation anim = new Animation(false);
-		for(int x = dep; x > max; x--) {
+		for(int x = dep; x < max; x++) {
 			anim.addFrame(toast.getSubImage(x*64, rowY*64, 64, 64), 50);
 		}
 		return anim;
