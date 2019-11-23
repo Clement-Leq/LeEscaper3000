@@ -109,9 +109,7 @@ public class Character {
 			}
 			else if(AncienneDirection == Direction.RIGHT) {
 				direction = Direction.JUMPRIGHT;
-				img_caseY -= 5;
 				jump_RIGHT.update((long) (i/2.5));
-				img_caseY += 5;
 			}
 		}
 	}
