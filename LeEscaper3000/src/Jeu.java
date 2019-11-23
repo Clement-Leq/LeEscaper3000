@@ -2,10 +2,12 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.tiled.TiledMap;
 
 import Character.Character;
+import Maps.Maps;
 
 
 public class Jeu extends BasicGame{
 	private Character personnage;
+	//private Maps map;
 	//private TiledMap map;
 	
 	public Jeu(String title) {
