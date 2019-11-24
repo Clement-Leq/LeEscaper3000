@@ -48,14 +48,14 @@ public class Character {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		img_caseX = 25;
-		img_caseY = 300;
+		img_caseX = 3*32;
+		img_caseY = 10*32;
 		idle_LEFT = getAnimation(0, 2, 0);
 		idle_RIGHT = getAnimation(9, 11, 4);
 		anim_RIGHT = getAnimation(7, 11 ,5);
 		anim_LEFT = getAnimation(0, 4, 1);
-		jump_RIGHT = getAnimation(3, 11, 6);
-		jump_LEFT = getAnimationJumpLeft(7, 1, 2);
+		jump_RIGHT = getAnimationJump(10, 3, 6);
+		jump_LEFT = getAnimation(1, 7, 2);
 		direction = Direction.LEFT;
 		AncienneDirection = direction;
 	}
@@ -66,7 +66,7 @@ public class Character {
 		}
 		return anim;
 	}
-	private Animation getAnimationJumpLeft(int dep, int max, int rowY) {
+	private Animation getAnimationJump(int dep, int max, int rowY) {
 		Animation anim = new Animation(false);
 		for(int x = dep; x > max; x--) {
 			anim.addFrame(toast.getSubImage(x*64, rowY*64, 64, 64), 50);

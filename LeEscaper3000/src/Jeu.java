@@ -7,25 +7,21 @@ import Maps.Maps;
 
 public class Jeu extends BasicGame{
 	private Character personnage;
-	//private Maps map;
-	//private TiledMap map;
+	private Maps map;
 	
 	public Jeu(String title) {
 		super(title);
 		personnage = new Character();
+		map = new Maps();
 	}
 
 	public void render(GameContainer gc, Graphics grphcs){
-		//map.render(0, 0);
+		map.renderMap();
 		personnage.renderCharacter(gc, grphcs);
 	}
 
 	public void init(GameContainer gc){
-		/*try {
-			map = new TiledMap("./maps/Java_Projet.tmx");
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}*/
+		map.iniMap();
 		personnage.initCharacter(gc);
 	}
 	
