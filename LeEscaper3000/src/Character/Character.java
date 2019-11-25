@@ -41,13 +41,9 @@ public class Character {
 			break;
 		}
 	}
-	public void initCharacter(GameContainer gc) {
-		try {
-			toast = new Image("./sprites/toast.png");
-		} catch (SlickException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void initCharacter(GameContainer gc) throws SlickException {
+		toast = new Image("./sprites/toast.png");
+		
 		img_caseX = 25;
 		img_caseY = 300;
 		idle_LEFT = getAnimation(1, -1, 0);
