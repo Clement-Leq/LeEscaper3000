@@ -37,5 +37,4 @@ public class Jeu extends BasicGame{
 			personnage.setImg_caseY(personnage.getImg_caseY()+4);
 		}
 	}
-
 }
