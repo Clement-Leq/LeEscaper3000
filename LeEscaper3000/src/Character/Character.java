@@ -93,7 +93,9 @@ public class Character {
 	}
 	public void updateCharacter(GameContainer gc, int i, Maps map) {
 		Input input = gc.getInput();
-		
+		if(map.isGrounded(img_caseX+32,img_caseY+64, "Sol")) { 
+			img_caseY += 4;
+		}
 		if(input.isKeyDown(Input.KEY_A)) {
 			direction = Direction.LEFT;
 			img_caseX -= 2;
@@ -122,12 +124,12 @@ public class Character {
 			if(AncienneDirection == Direction.LEFT) {
 				direction = Direction.JUMPLEFT;
 				img_caseY -= 10;
-				//jump_LEFT.update((long) (i/2.5));
+				jump_LEFT.update((long) (i/2.5));
 			}
 			else if(AncienneDirection == Direction.RIGHT) {
 				direction = Direction.JUMPRIGHT;
 				img_caseY -= 10 ;
-				//jump_RIGHT.update((long) (i/2.5));
+				jump_RIGHT.update((long) (i/2.5));
 			}
 		}
 	}

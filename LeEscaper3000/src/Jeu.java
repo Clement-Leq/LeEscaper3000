@@ -1,5 +1,4 @@
 import org.newdawn.slick.*;
-import org.newdawn.slick.tiled.TiledMap;
 
 import Character.Character;
 import Character.Gardien;
@@ -33,8 +32,5 @@ public class Jeu extends BasicGame{
 	public void update(GameContainer gc, int i){
 		mechantMur.updateGardien(gc, i);
 		personnage.updateCharacter(gc, i, map);
-		if(map.isGrounded(personnage.getImg_caseX(), personnage.getImg_caseY()+64, "Sol")) {
-			personnage.setImg_caseY(personnage.getImg_caseY()+4);
-		}
 	}
 }
