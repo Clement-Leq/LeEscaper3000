@@ -26,10 +26,10 @@ public class Gardien {
 	public void renderGardien(GameContainer gc, Graphics grphcs) {
 		int posX = img_caseX;
 		int posY = img_caseY;
-		anim_muscles.draw(9 * 32, (float) (12.2 * 32));
+		anim_muscles.draw(9 * 32, 11 * 32);
 	}
 	public void initGardien(GameContainer gc) throws SlickException {
-		gardien = new Image("./sprites/Police_mur_gros.png");
+		gardien = new Image("./sprites/Police_mur_gros(1).png");
 		
 		img_caseX = 150;
 		img_caseY = 300;
@@ -40,10 +40,10 @@ public class Gardien {
 	private Animation getAnimation(int dep, int max, int rowY) {
 		Animation anim = new Animation(false);
 		for(int x = dep; x < max; x++) {
-			anim.addFrame(gardien.getSubImage(x*66, rowY*66, 60, 60), 200);
+			anim.addFrame(gardien.getSubImage(x*66, rowY*66, 70, 95), 150);
 		}
 		for(int x = max; x > dep; x--) {
-			anim.addFrame(gardien.getSubImage(x*66, rowY*66, 60, 60), 200);
+			anim.addFrame(gardien.getSubImage(x*66, rowY*66, 70, 95), 150);
 		}
 		return anim;
 	}
