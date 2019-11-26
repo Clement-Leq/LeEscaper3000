@@ -1,36 +1,34 @@
 package Maps;
 
-import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
-public class Maps extends BasicGame{
-	
+public class Maps {
 	private TiledMap map;
-	private int tilesSize;
 	
-	public Maps(String title) {
-		super(title);
-		// TODO Auto-generated constructor stub
+	public int index(String calque) {
+		return map.getLayerIndex(calque);
 	}
-	
-	@Override
-	public void render(GameContainer arg0, Graphics arg1) throws SlickException {
-		map.render(0,0);
+	public boolean isGrounded(int x, int y,String calque) {
+		if(map.getTileId(x/32, y/32, index(calque)) == 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
 		
 	}
-	
-	@Override
-	public void init(GameContainer arg0) throws SlickException {
-		map = new TiledMap("./maps/Java_Projet.tmx");
-		tilesSize = 32;
+	public void iniMap() {
+		try {
+			map = new TiledMap("./maps/Java_Projet.tmx");
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 	}
-	
-	@Override
-	public void update(GameContainer arg0, int arg1) throws SlickException {
-		// TODO Auto-generated method stub
+	public void renderMap() {
+		map.render(0,0);
+	}
+	public void updateMap(){
 		
 	}
 }

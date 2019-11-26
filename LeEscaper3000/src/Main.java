@@ -11,7 +11,7 @@ public class Main {
 		int hauteurAffichage = 768;
 		boolean siPleinEcran = false;
 		try {
-			AppGameContainer app = new AppGameContainer( new Jeu("LeEscaper3000"));
+			AppGameContainer app = new AppGameContainer( new Jeu("LeEscaper3000")  );
 			app.setDisplayMode(largeurAffichage, hauteurAffichage, siPleinEcran);
 			app.setTargetFrameRate(60);
 			app.start();
