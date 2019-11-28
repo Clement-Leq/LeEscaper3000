@@ -7,11 +7,11 @@ import org.newdawn.slick.SlickException;
 public class Main {
 
 	public static void main(String[] args) {
-		int largeurAffichage = 1440;
+		int largeurAffichage = 8040;
 		int hauteurAffichage = 768;
 		boolean siPleinEcran = false;
 		try {
-			AppGameContainer app = new AppGameContainer( new Jeu("LeEscaper3000")  );
+			AppGameContainer app = new AppGameContainer( new Jeu("LeEscaper3000") );
 			app.setDisplayMode(largeurAffichage, hauteurAffichage, siPleinEcran);
 			app.setTargetFrameRate(60);
 			app.start();

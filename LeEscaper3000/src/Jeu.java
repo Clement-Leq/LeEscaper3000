@@ -11,27 +11,34 @@ public class Jeu extends BasicGame{
 	private Character personnage;
 	private Maps map;
 	private Gardien mechantMur;
+	private Menu menu;
 	
 	//partie Menu
+	private Image bg;
 	private Image play;
 	private Image playBg;
 	private Image exitGame;
 	private Image exitGameBg;
-	private Image bg;
-	private boolean select = false;
-	private boolean select2 = false;
+	private Image menuPause;
+	private Image menuBtn;
+	private Image back;
+	private boolean selectmenu = false;
+	private boolean selectmenu2 = false;
+	private boolean selectpause = false;
+	private boolean selectpause2 = false;
 	private boolean enable = true;
+	private boolean pause = false;
 	
 	public Jeu(String title) {
 		super(title);
 		map = new Maps();
 		mechantMur = new Gardien();
 		personnage = new Character();
+		menu = new Menu();
 	}
 
 	public void render(GameContainer gc, Graphics grphcs) throws SlickException{
 		renderMenu(gc, grphcs);
-		
 	}
 
 	public void init(GameContainer gc) throws SlickException{
@@ -42,42 +49,29 @@ public class Jeu extends BasicGame{
 	}
 	
 	public void update(GameContainer gc, int i) throws SlickException{
-		mechantMur.updateGardien(gc, i);
-		personnage.updateCharacter(gc, i, map);
-		if(map.isGrounded(personnage.getImg_caseX(), personnage.getImg_caseY()+64, "Sol")) {
-			personnage.setImg_caseY(personnage.getImg_caseY()+4);
+		if (!menu.isEnableStartMenu() && !menu.isEnablePauseMenu()) { 
+			mechantMur.updateGardien(gc, i);
+			personnage.updateCharacter(gc, i, map);
+			if(map.isGrounded(personnage.getImg_caseX(), personnage.getImg_caseY()+64, "Sol")) {
+				personnage.setImg_caseY(personnage.getImg_caseY()+4);
+			}
 		}
-		updateMenu(gc, i);		
+		updateMenu(gc, i);
 	}
 	
 	// Partie Menu
 	
 	public void renderMenu(GameContainer gc, Graphics grphcs){
-		if (enable) {
+		if (menu.isEnableStartMenu()) {
 			bg.draw(0, 0, 1440, 768);
 			grphcs.drawString("LE ESCAPER 3000 !!", 100, 50);
 			play.draw(100, 100);
 			exitGame.draw(100, 200);
-			if(select) {
-				playBg.draw(101,102);
-				select = false;
-				if(Mouse.isButtonDown(0)){
-					enable = false;
-				}
-			}
-			if(select2) {
-				exitGameBg.draw(96,202);
-				select2 = false;
-				if(Mouse.isButtonDown(0)){
-					enable = false;
-					System.exit(0);
-				}
-			}
+			menu.menuStart(playBg, exitGame);
 		}
-		if(!enable) {
-			map.renderMap();
-			mechantMur.renderGardien(gc, grphcs);
-			personnage.renderCharacter(gc, grphcs);
+		else {
+			renderJeu(gc, grphcs);
+			menu.menuPause(gc, grphcs, menuPause, menuBtn, back, this);
 		}
 	}
 	
@@ -87,15 +81,29 @@ public class Jeu extends BasicGame{
 		int posY = Mouse.getY();
 		//System.out.println("posX :" + posX);
 		//System.out.println("posY :" + posY);
+		
+		if(input.isKeyPressed(Input.KEY_ESCAPE)) {
+			menu.setEnablePauseMenu(true);
+		}
 		if((posX > 100 && posX < 300) && (posY > 624 && posY < 669)) {
-			select = true;
+			menu.setMouseOnPlay(true);
 		}
-		if((posX > 99 && posX < 128) && (posY > 541 && posY < 568)) {
-			select2 = true;
+		else if((posX > 99 && posX < 128) && (posY > 541 && posY < 568)) {
+			menu.setMouseOnExit(true);
 		}
-		if(input.isKeyDown(Input.KEY_SPACE)) {
-			
+		else if((posX > 590 && posX < 832) && (posY > 406 && posY < 479)) {
+			menu.setMouseOnMenu(true);
 		}
+		else if((posX > 641 && posX < 782) && (posY > 226 && posY < 286)) {
+			menu.setMouseOnBack(true);
+		}
+		else {
+			menu.setMouseOnPlay(false);
+			menu.setMouseOnExit(false);
+			menu.setMouseOnMenu(false);
+			menu.setMouseOnBack(false);
+		}
+		
 	}
 	
 	public void initMenu (GameContainer gc) throws SlickException {
@@ -104,6 +112,15 @@ public class Jeu extends BasicGame{
 		playBg = new Image("./images/BTN_PLAY_BG.png");
 		exitGame = new Image("./images/BTN_Exit.png");
 		exitGameBg = new Image("./images/BTN_EXIT2.png");
+		menuPause = new Image("./images/PAUSE_PRESET.png");
+		menuBtn = new Image("./images/BTN_MENU.png");
+		back = new Image("./images/BTN_BACK.png");
 		map.iniMap();
+	}
+	
+	public void renderJeu(GameContainer gc, Graphics grphcs) {
+		map.renderMap();
+		mechantMur.renderGardien(gc, grphcs);
+		personnage.renderCharacter(gc, grphcs);
 	}
 }
