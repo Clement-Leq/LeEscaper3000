@@ -16,7 +16,6 @@ public class Maps {
 		else {
 			return false;
 		}
-		
 	}
 	public void iniMap() {
 		try {

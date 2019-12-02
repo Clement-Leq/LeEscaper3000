@@ -39,7 +39,7 @@ public class Gardien {
 		img_caseX = 150;
 		img_caseY = 300;
 		anim_muscles = getAnimation(0, 27, 0);
-		direction = Direction.LEFT;
+		direction = Direction.RUNLEFT;
 		AncienneDirection = direction;
 	}
 	private Animation getAnimation(int dep, int max, int rowY) {
