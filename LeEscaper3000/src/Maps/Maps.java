@@ -6,17 +6,10 @@ import org.newdawn.slick.tiled.TiledMap;
 public class Maps {
 	private TiledMap map;
 	
-	public int index(String calque) {
-		return map.getLayerIndex(calque);
-	}
 	public boolean isGrounded(int x, int y,String calque) {
-		if(map.getTileId(x/32, y/32, index(calque)) == 0) {
-			return true;
-		}
-		else {
-			return false;
-		}
+			return map.getTileId(x/32, y/32, map.getLayerIndex(calque)) == 0;
 	}
+	
 	public void iniMap() {
 		try {
 			map = new TiledMap("./maps/Java_Projet.tmx");

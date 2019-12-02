@@ -59,9 +59,8 @@ public class Character {
 			break;
 		case JUMPLEFT: jump_LEFT.draw(posX, posY);
 			break;
-		case FALLLEFT: fall_LEFT.draw(posX, posY);
+		default:
 			break;
-		case FALLRIGHT: fall_RIGHT.draw(posX, posY);
 		}
 	}
 	public void initCharacter(GameContainer gc) {
@@ -100,16 +99,24 @@ public class Character {
 	
 	public void updateCharacter(GameContainer gc, int i, Maps map) {
 		Input input = gc.getInput();
+		
 		if(map.isGrounded(img_caseX, img_caseY+64, "Sol")) {
 			img_caseY += 4;
 		}
+		/*if(personnage.getLayoutY() + personnage.getFitHeight() <= background.getFitHeight() * 0.8d){
+			HGY.set(HGY.get()  + vitesseY);
+			vitesseY += g; 
+		}
+	
+		if(personnage.getLayoutY() + personnage.getFitHeight() > background.getFitHeight() * 0.8d){
+			HGY.set((background.getFitHeight() * 0.8d - personnage.getFitHeight()) / background.getFitHeight());
+			vitesseY = 0;
+		}*/
 		if(input.isKeyDown(Input.KEY_A)) {
-			if(map.isGrounded(img_caseX, img_caseY, "Sol")) {
-				direction = Direction.RUNLEFT;
-				img_caseX -= 4;
-				run_LEFT.update((long) (i/2.5));
-				AncienneDirection = direction;
-			}
+			direction = Direction.RUNLEFT;
+			img_caseX -= 4;
+			run_LEFT.update((long) (i/2.5));
+			AncienneDirection = direction;
 		}
 		else {
 			if(AncienneDirection == Direction.RUNLEFT) {
@@ -118,12 +125,10 @@ public class Character {
 			}
 		}
 		if(input.isKeyDown(Input.KEY_D)) {
-			if(map.isGrounded(img_caseX-1, img_caseY, "Sol")) {
-				direction = Direction.RUNRIGHT;
-				img_caseX += 4;
-				run_RIGHT.update((long) (i/2.5));
-				AncienneDirection = direction;
-			}
+			direction = Direction.RUNRIGHT;
+			img_caseX += 4;
+			run_RIGHT.update((long) (i/2.5));
+			AncienneDirection = direction;
 		}
 		else {
 			if(AncienneDirection == Direction.RUNRIGHT) {
