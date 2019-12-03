@@ -17,7 +17,25 @@ public class Menu {
 	private boolean mouseOnExit = false;
 	private boolean mouseOnMenu = false;
 	private boolean mouseOnBack = false;
+	private boolean resetGame = false;
+	private int music_play = 1;
 	
+	public int getMusic_play() {
+		return music_play;
+	}
+
+	public void setMusic_play(int music_play) {
+		this.music_play = music_play;
+	}
+
+	public boolean isResetGame() {
+		return resetGame;
+	}
+
+	public void setResetGame(boolean resetGame) {
+		this.resetGame = resetGame;
+	}
+
 	public boolean isMouseOnPlay() {
 		return mouseOnPlay;
 	}
@@ -70,12 +88,14 @@ public class Menu {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void menuStart (Image play, Image exit) {
+	public void menuStart (GameContainer gc, Image play, Image exit, Jeu jeu) throws SlickException {
 		if(isMouseOnPlay()) {
 			play.draw(101,102);
 			
 			if(Mouse.isButtonDown(0)){
 				setEnableStartMenu(false);
+				jeu.init(gc);
+				setMusic_play(2);
 			}
 		}
 		else if (isMouseOnExit()) {
@@ -98,6 +118,7 @@ public class Menu {
 				if(Mouse.isButtonDown(0)){
 					setEnablePauseMenu(false);
 					setEnableStartMenu(true);
+					setMusic_play(1);
 				}
 			}
 			if(isMouseOnBack()) {

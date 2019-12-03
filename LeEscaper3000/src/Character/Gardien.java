@@ -1,9 +1,6 @@
 package Character;
 import org.newdawn.slick.*;
 
-enum Direction2{
-	idleRIGHT, idleLEFT, RIGHT, LEFT, JUMPRIGHT, JUMPLEFT
-}
 
 public class Gardien {
 	private int img_caseX;
@@ -33,11 +30,11 @@ public class Gardien {
 		
 		img_caseX = 150;
 		img_caseY = 300;
-		anim_muscles = getAnimation(0, 27, 0);
-		direction = Direction.LEFT;
+		anim_muscles = getAnimationStop(0, 27, 0);
+		direction = Direction.RUNLEFT;
 		AncienneDirection = direction;
 	}
-	private Animation getAnimation(int dep, int max, int rowY) {
+	private Animation getAnimationStop(int dep, int max, int rowY) {
 		Animation anim = new Animation(false);
 		for(int x = dep; x < max; x++) {
 			anim.addFrame(gardien.getSubImage(x*66, rowY*66, 70, 95), 150);

@@ -4,6 +4,7 @@ import org.newdawn.slick.tiled.TiledMap;
 
 import Character.Character;
 import Character.Gardien;
+import Character.Pol_Cout;
 import Maps.Maps;
 
 
@@ -11,6 +12,7 @@ public class Jeu extends BasicGame{
 	private Character personnage;
 	private Maps map;
 	private Gardien mechantMur;
+	private Pol_Cout policierCouteau;
 	private Menu menu;
 	
 	//partie Menu
@@ -18,21 +20,17 @@ public class Jeu extends BasicGame{
 	private Image play;
 	private Image playBg;
 	private Image exitGame;
-	private Image exitGameBg;
 	private Image menuPause;
 	private Image menuBtn;
 	private Image back;
-	private boolean selectmenu = false;
-	private boolean selectmenu2 = false;
-	private boolean selectpause = false;
-	private boolean selectpause2 = false;
-	private boolean enable = true;
-	private boolean pause = false;
+	private Music musique_Fin;
+	private Music musique_Base;
 	
 	public Jeu(String title) {
 		super(title);
 		map = new Maps();
 		mechantMur = new Gardien();
+		policierCouteau = new Pol_Cout();
 		personnage = new Character();
 		menu = new Menu();
 	}
@@ -45,15 +43,22 @@ public class Jeu extends BasicGame{
 		map.iniMap();
 		mechantMur.initGardien(gc);
 		personnage.initCharacter(gc);
+		policierCouteau.initGardCout(gc);
 		initMenu(gc);
 	}
 	
 	public void update(GameContainer gc, int i) throws SlickException{
 		if (!menu.isEnableStartMenu() && !menu.isEnablePauseMenu()) { 
 			mechantMur.updateGardien(gc, i);
+			policierCouteau.updateGardCout(gc, i, map);
 			personnage.updateCharacter(gc, i, map);
+			
 			if(map.isGrounded(personnage.getImg_caseX(), personnage.getImg_caseY()+64, "Sol")) {
 				personnage.setImg_caseY(personnage.getImg_caseY()+4);
+			}
+			
+			if(map.isGrounded(policierCouteau.getImg_caseX(), policierCouteau.getImg_caseY()+81, "Sol")) {
+				policierCouteau.setImg_caseY(policierCouteau.getImg_caseY()+4);
 			}
 		}
 		updateMenu(gc, i);
@@ -61,13 +66,13 @@ public class Jeu extends BasicGame{
 	
 	// Partie Menu
 	
-	public void renderMenu(GameContainer gc, Graphics grphcs){
+	public void renderMenu(GameContainer gc, Graphics grphcs) throws SlickException{
 		if (menu.isEnableStartMenu()) {
 			bg.draw(0, 0, 1440, 768);
 			grphcs.drawString("LE ESCAPER 3000 !!", 100, 50);
 			play.draw(100, 100);
 			exitGame.draw(100, 200);
-			menu.menuStart(playBg, exitGame);
+			menu.menuStart(gc, playBg, exitGame, this);
 		}
 		else {
 			renderJeu(gc, grphcs);
@@ -103,7 +108,16 @@ public class Jeu extends BasicGame{
 			menu.setMouseOnMenu(false);
 			menu.setMouseOnBack(false);
 		}
-		
+		if(menu.getMusic_play() == 1) {
+			musique_Fin.loop();
+			musique_Fin.setVolume(0.08f);
+			menu.setMusic_play(0);
+		}
+		else if (menu.getMusic_play() == 2) {
+			musique_Base.loop();
+			musique_Base.setVolume(0.08f);
+			menu.setMusic_play(0);
+		}
 	}
 	
 	public void initMenu (GameContainer gc) throws SlickException {
@@ -111,16 +125,19 @@ public class Jeu extends BasicGame{
 		play = new Image("./images/BTN_PLAY.png");
 		playBg = new Image("./images/BTN_PLAY_BG.png");
 		exitGame = new Image("./images/BTN_Exit.png");
-		exitGameBg = new Image("./images/BTN_EXIT2.png");
 		menuPause = new Image("./images/PAUSE_PRESET.png");
 		menuBtn = new Image("./images/BTN_MENU.png");
 		back = new Image("./images/BTN_BACK.png");
+		musique_Fin = new Music("./audio/Credit_Theme.wav");
+		musique_Base = new Music("./audio/Base_Theme.wav");
+		
 		map.iniMap();
 	}
 	
 	public void renderJeu(GameContainer gc, Graphics grphcs) {
 		map.renderMap();
 		mechantMur.renderGardien(gc, grphcs);
+		policierCouteau.renderGardCout(gc, grphcs);
 		personnage.renderCharacter(gc, grphcs);
 	}
 }

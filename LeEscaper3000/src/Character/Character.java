@@ -4,7 +4,7 @@ import org.newdawn.slick.*;
 import Maps.Maps;
 
 enum Direction{
-	idleRIGHT, idleLEFT, RIGHT, LEFT, JUMPRIGHT, JUMPLEFT
+	idleRIGHT, idleLEFT, RUNRIGHT, RUNLEFT, JUMPRIGHT, JUMPLEFT, LEFTKNIFE, RIGHTKNIFE
 }
 
 public class Character {
@@ -13,8 +13,8 @@ public class Character {
 	private Image toast;
 	private Animation idle_LEFT;
 	private Animation idle_RIGHT;
-	private Animation anim_RIGHT;
-	private Animation anim_LEFT;
+	private Animation run_RIGHT;
+	private Animation run_LEFT;
 	private Animation jump_RIGHT;
 	private Animation jump_LEFT;
 	private Direction direction;
@@ -45,14 +45,14 @@ public class Character {
 		int posY = img_caseY;
 		
 		switch(direction) {
-		case RIGHT: anim_RIGHT.draw(posX, posY);
+		case RUNRIGHT: run_RIGHT.draw(posX, posY);
 			break;
-		case LEFT: anim_LEFT.draw(posX, posY);
+		case RUNLEFT: run_LEFT.draw(posX, posY);
 			break;
 		case idleLEFT: idle_LEFT.draw(posX, posY);
 			break;
 		case idleRIGHT: idle_RIGHT.draw(posX, posY);
-		break;
+			break;
 		case JUMPRIGHT: jump_RIGHT.draw(posX, posY);
 			break;
 		case JUMPLEFT: jump_LEFT.draw(posX, posY);
@@ -70,11 +70,11 @@ public class Character {
 		img_caseY = 300;
 		idle_LEFT = getAnimation(0, 2, 0);
 		idle_RIGHT = getAnimation(9, 11, 4);
-		anim_RIGHT = getAnimation(7, 11 ,5);
-		anim_LEFT = getAnimation(0, 4, 1);
+		run_RIGHT = getAnimation(7, 11 ,5);
+		run_LEFT = getAnimation(0, 4, 1);
 		jump_RIGHT = getAnimationJump(10, 3, 6);
 		jump_LEFT = getAnimation(1, 7, 2);
-		direction = Direction.LEFT;
+		direction = Direction.RUNLEFT;
 		AncienneDirection = direction;
 	}
 	private Animation getAnimation(int dep, int max, int rowY) {
@@ -95,36 +95,36 @@ public class Character {
 		Input input = gc.getInput();
 		
 		if(input.isKeyDown(Input.KEY_A)) {
-			direction = Direction.LEFT;
+			direction = Direction.RUNLEFT;
 			img_caseX -= 2;
-			anim_LEFT.update((long) (i/2.5));
+			run_LEFT.update((long) (i/2.5));
 			AncienneDirection = direction;
 		}
 		else {
-			if(AncienneDirection == Direction.LEFT) {
+			if(AncienneDirection == Direction.RUNLEFT) {
 				direction = Direction.idleLEFT;
 				idle_LEFT.update((long) (i/2.5));
 			}
 		}
 		if(input.isKeyDown(Input.KEY_D)) {
-			direction = Direction.RIGHT;
+			direction = Direction.RUNRIGHT;
 			img_caseX += 2;
-			anim_RIGHT.update((long) (i/2.5));
+			run_RIGHT.update((long) (i/2.5));
 			AncienneDirection = direction;
 		}
 		else {
-			if(AncienneDirection == Direction.RIGHT) {
+			if(AncienneDirection == Direction.RUNRIGHT) {
 				direction = Direction.idleRIGHT;
 				idle_RIGHT.update((long) (i/2.5));
 			}
 		}
 		if(input.isKeyDown(Input.KEY_SPACE)) {
-			if(AncienneDirection == Direction.LEFT) {
+			if(AncienneDirection == Direction.RUNLEFT) {
 				direction = Direction.JUMPLEFT;
 				img_caseY -= 10;
 				jump_LEFT.update((long) (i/2.5));
 			}
-			else if(AncienneDirection == Direction.RIGHT) {
+			else if(AncienneDirection == Direction.RUNRIGHT) {
 				direction = Direction.JUMPRIGHT;
 				img_caseY -= 10 ;
 				jump_RIGHT.update((long) (i/2.5));
