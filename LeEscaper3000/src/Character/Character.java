@@ -107,7 +107,12 @@ public class Character {
 	
 	public void updateCharacter(GameContainer gc, int i, Maps map) {
 		Input input = gc.getInput();
-		
+		if(map.isGrounded((int)(img_caseX+32), (int)(img_caseY), "Sol")) {
+			img_caseX += 4;
+		}
+		if( map.isGrounded((int)(img_caseX-5), (int)(img_caseY), "Sol")) {
+			img_caseX -= 4;
+		}
 		if(input.isKeyDown(Input.KEY_A) && map.isGrounded((int)(img_caseX-5), (int)(img_caseY), "Sol")) {
 			direction = Direction.RUNLEFT;
 			img_caseX -= 4;
@@ -161,6 +166,4 @@ public class Character {
 	        this.img_caseY = this.img_caseY + this.vertical_speed;
 		}
 	}
-}/*
-
-*/
+}
