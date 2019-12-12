@@ -8,8 +8,11 @@ enum Direction{
 }
 
 public class Character {
-	private int img_caseX;
-	private int img_caseY;
+	private float img_caseX;
+	private float img_caseY;
+	private float vertical_speed;
+	private final float GRAVITY = 1f;
+	private final float TERMINAL_VELOCITY = 7;
 	private Image toast;
 	private Animation idle_LEFT;
 	private Animation idle_RIGHT;
@@ -22,19 +25,19 @@ public class Character {
 	private Direction direction;
 	private Direction AncienneDirection;
 	
-	public int getImg_caseX() {
+	public float getImg_caseX() {
 		return img_caseX;
 	}
 
-	public void setImg_caseX(int img_caseX) {
+	public void setImg_caseX(float img_caseX) {
 		this.img_caseX = img_caseX;
 	}
 
-	public int getImg_caseY() {
+	public float getImg_caseY() {
 		return img_caseY;
 	}
 
-	public void setImg_caseY(int img_caseY) {
+	public void setImg_caseY(float img_caseY) {
 		this.img_caseY = img_caseY;
 	}
 	
@@ -43,8 +46,8 @@ public class Character {
 	}
 	public void renderCharacter(GameContainer gc, Graphics grphcs) {
 		
-		int posX = img_caseX;
-		int posY = img_caseY;
+		float posX = img_caseX;
+		float posY = img_caseY;
 		
 		switch(direction) {
 		case RUNRIGHT: run_RIGHT.draw(posX, posY);
@@ -59,8 +62,10 @@ public class Character {
 			break;
 		case JUMPLEFT: jump_LEFT.draw(posX, posY);
 			break;
-		default:
+		case FALLRIGHT: fall_RIGHT.draw(posX, posY);
 			break;
+		case FALLLEFT: fall_LEFT.draw(posX, posY);
+		break;
 		}
 	}
 	public void initCharacter(GameContainer gc) {
@@ -71,6 +76,7 @@ public class Character {
 		}
 		img_caseX = 3;
 		img_caseY = 300;
+		vertical_speed = 0;
 		run_RIGHT = getAnimationRight(0, 6, 3);
 		jump_RIGHT = getAnimationRight(0, 3 ,2);
 		fall_RIGHT = getAnimationRight(0, 3, 0);
@@ -79,6 +85,8 @@ public class Character {
 		jump_LEFT = getAnimationLeft(5, 3, 7);
 		fall_LEFT = getAnimationLeft(5, 3, 5);
 		idle_LEFT = getAnimationLeft(5, 4, 6);
+		fall_RIGHT = getAnimationRight(0, 2, 0);		
+		fall_LEFT = getAnimationLeft(5, 3, 5);
 		direction = Direction.RUNLEFT;
 		AncienneDirection = direction;
 	}
@@ -100,31 +108,19 @@ public class Character {
 	public void updateCharacter(GameContainer gc, int i, Maps map) {
 		Input input = gc.getInput();
 		
-		if(map.isGrounded(img_caseX, img_caseY+64, "Sol")) {
-			img_caseY += 4;
-		}
-		/*if(personnage.getLayoutY() + personnage.getFitHeight() <= background.getFitHeight() * 0.8d){
-			HGY.set(HGY.get()  + vitesseY);
-			vitesseY += g; 
-		}
-	
-		if(personnage.getLayoutY() + personnage.getFitHeight() > background.getFitHeight() * 0.8d){
-			HGY.set((background.getFitHeight() * 0.8d - personnage.getFitHeight()) / background.getFitHeight());
-			vitesseY = 0;
-		}*/
-		if(input.isKeyDown(Input.KEY_A)) {
+		if(input.isKeyDown(Input.KEY_A) && map.isGrounded((int)(img_caseX-5), (int)(img_caseY), "Sol")) {
 			direction = Direction.RUNLEFT;
 			img_caseX -= 4;
 			run_LEFT.update((long) (i/2.5));
 			AncienneDirection = direction;
 		}
-		else {
+		else{
 			if(AncienneDirection == Direction.RUNLEFT) {
 				direction = Direction.idleLEFT;
 				idle_LEFT.update((long) (i/2.5));
 			}
 		}
-		if(input.isKeyDown(Input.KEY_D)) {
+		if(input.isKeyDown(Input.KEY_D) && map.isGrounded((int)(img_caseX+32), (int)(img_caseY), "Sol")) {
 			direction = Direction.RUNRIGHT;
 			img_caseX += 4;
 			run_RIGHT.update((long) (i/2.5));
@@ -139,14 +135,32 @@ public class Character {
 		if(input.isKeyDown(Input.KEY_SPACE)) {
 			if(AncienneDirection == Direction.RUNLEFT) {
 				direction = Direction.JUMPLEFT;
-				img_caseY -= 10;
+				img_caseY -= 7;
 				jump_LEFT.update((long) (i/2.5));
 			}
 			else if(AncienneDirection == Direction.RUNRIGHT) {
 				direction = Direction.JUMPRIGHT;
-				img_caseY -= 10 ;
+				img_caseY -= 7;
 				jump_RIGHT.update((long) (i/2.5));
 			}
 		}
+		else if(map.isGrounded((int)(img_caseX), (int)(img_caseY+64), "Sol")) {
+			if(AncienneDirection == Direction.RUNRIGHT) {
+				direction = Direction.FALLRIGHT;
+				fall_RIGHT.update((long) (i/2.5));
+			}
+			if(AncienneDirection == Direction.RUNLEFT) {
+				direction = Direction.FALLLEFT;
+				fall_LEFT.update((long) (i/2.5));
+			}
+        	this.vertical_speed = (int) (this.vertical_speed + GRAVITY);
+	        if (this.vertical_speed > TERMINAL_VELOCITY)
+	        {
+	            this.vertical_speed = TERMINAL_VELOCITY;
+	        }
+	        this.img_caseY = this.img_caseY + this.vertical_speed;
+		}
 	}
-}
+}/*
+
+*/
