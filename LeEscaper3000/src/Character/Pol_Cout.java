@@ -1,5 +1,6 @@
 package Character;
 import org.newdawn.slick.*;
+import org.newdawn.slick.tiled.TiledMap;
 
 import Maps.Maps;
 
@@ -20,6 +21,7 @@ public class Pol_Cout {
 	private Animation anim_ARM_L;
 	private Animation jump_RIGHT;
 	private Animation jump_LEFT;
+	private IA ia = IA.getInstance();
 	private Direction direction;
 	private Direction AncienneDirection;
 	
@@ -42,6 +44,13 @@ public class Pol_Cout {
 	public Pol_Cout() {
 		super();
 	}	
+	
+	private static class Singleton{
+		private static Pol_Cout INSTANCE = new Pol_Cout();
+	}
+	public static Pol_Cout getInstance() {
+		return Singleton.INSTANCE;
+	}
 	
 	public void renderGardCout(GameContainer gc, Graphics grphcs) {
 		int posX = img_caseX;
@@ -90,14 +99,14 @@ public class Pol_Cout {
 		anim_RIGHT = getAnimationRight(0, 8, 3);
 		anim_ARM_R = getAnimationRight(0, 8, 10);
 		anim_KNIFE_R = getAnimationRight(25, 32, 0);
-		jump_RIGHT = getAnimationRight(11, 22, 6);
+		jump_RIGHT = getAnimationJRight(22, 11, 6);
 		
 		idle_LEFT = getAnimationLeft(31, 30, 0); 
 		idle_ARM_LEFT = getAnimationLeft(31, 30, 10);
 		anim_LEFT = getAnimationLeft(31, 23, 3);
 		anim_ARM_L = getAnimationLeft(31, 23, 10);
 		anim_KNIFE_L = getAnimationLeft(6, 0, 0);
-		jump_LEFT = getAnimationLeft(20, 9, 6);
+		jump_LEFT = getAnimationJLeft(9, 20, 6);
 		
 		direction = Direction.RUNLEFT;
 		AncienneDirection = direction;
@@ -110,6 +119,13 @@ public class Pol_Cout {
 		}
 		return anim;
 	}
+	private Animation getAnimationJRight(int dep, int max, int rowY) {
+		Animation anim = new Animation(false);
+		for(int x = dep; x > max; x--) {
+			anim.addFrame(gardienRight.getSubImage(x*89, rowY*106, 80, 100), 50);
+		}
+		return anim;
+	}
 	
 	private Animation getAnimationLeft(int dep, int max, int rowY) {
 		Animation anim = new Animation(false);
@@ -118,13 +134,79 @@ public class Pol_Cout {
 		}
 		return anim;
 	}
+	private Animation getAnimationJLeft(int dep, int max, int rowY) {
+		Animation anim = new Animation(false);
+		for(int x = dep; x < max; x++) {
+			anim.addFrame(gardienLeft.getSubImage(x*89, rowY*106, 80, 100), 50);
+		}
+		return anim;
+	}
+	
+	public void jump(GameContainer gc, int i, Maps map) {
+		if(AncienneDirection == Direction.RUNLEFT || AncienneDirection == Direction.LEFTKNIFE) {
+			direction = Direction.JUMPLEFT;
+			img_caseY -= 15;
+			jump_LEFT.update(i);
+		}
+		else if(AncienneDirection == Direction.RUNRIGHT || AncienneDirection == Direction.RIGHTKNIFE) {
+			direction = Direction.JUMPRIGHT;
+			img_caseY -= 15;
+			jump_RIGHT.update(i);
+		}
+	}
+	
+	public void depDroite(GameContainer gc, int i, Maps map) {
+		//Input input = gc.getInput();
+		 
+		direction = Direction.RUNRIGHT; 
+		img_caseX += 5;
+		anim_RIGHT.update(i);
+		anim_ARM_R.update(i);
+		AncienneDirection = direction;
+
+		/*if(input.isKeyDown(Input.KEY_LSHIFT) && (AncienneDirection == Direction.RUNRIGHT || AncienneDirection == Direction.RIGHTKNIFE)) {
+			direction = Direction.RIGHTKNIFE;
+			anim_KNIFE_R.update(i/2);
+			AncienneDirection = direction;
+		}
+		else {
+			if(AncienneDirection == Direction.RUNRIGHT || AncienneDirection == Direction.RIGHTKNIFE) {
+				direction = Direction.idleRIGHT;
+				idle_RIGHT.update((long) (i/2.5));
+				idle_ARM_RIGHT.update((long) (i/2.5));
+			}
+		}*/
+	}
+	
+	public void depGauche(GameContainer gc, int i, Maps map) {
+		//Input input = gc.getInput();
+		
+		direction = Direction.RUNLEFT;
+		img_caseX -= 5;
+		anim_LEFT.update(i);
+		anim_ARM_L.update(i);
+		AncienneDirection = direction;
+		
+		/*if(input.isKeyDown(Input.KEY_LSHIFT) && (AncienneDirection == Direction.RUNLEFT || AncienneDirection == Direction.LEFTKNIFE)) {
+			direction = Direction.LEFTKNIFE;
+			anim_KNIFE_L.update(i/2);
+			AncienneDirection = direction;
+		}
+		else {
+			if(AncienneDirection == Direction.LEFTKNIFE || AncienneDirection == Direction.RUNLEFT) {
+				direction = Direction.idleLEFT;
+				idle_LEFT.update((long) (i/2.5));
+				idle_ARM_LEFT.update((long) (i/2.5));
+			}
+		}*/
+	}
 	
 	public void updateGardCout(GameContainer gc, int i, Maps map) {
 		Input input = gc.getInput();
 		
 		if(input.isKeyDown(Input.KEY_A)) {
 			direction = Direction.RUNLEFT;
-			img_caseX -= 2;
+			img_caseX -= 5;
 			anim_LEFT.update(i);
 			anim_ARM_L.update(i);
 			AncienneDirection = direction;
@@ -141,10 +223,10 @@ public class Pol_Cout {
 				idle_ARM_LEFT.update((long) (i/2.5));
 			}
 		}
-		
-		if(input.isKeyDown(Input.KEY_D)) {
+		System.out.println(ia.isFirstJump() + " : FJ_Cout");
+		if(ia.isFirstJump()) {
 			direction = Direction.RUNRIGHT;
-			img_caseX += 2;
+			img_caseX += 5;
 			anim_RIGHT.update(i);
 			anim_ARM_R.update(i);
 			AncienneDirection = direction;
@@ -162,7 +244,7 @@ public class Pol_Cout {
 			}
 		}
 		
-		if(input.isKeyPressed(Input.KEY_SPACE)) {
+		/*if(input.isKeyPressed(Input.KEY_SPACE)) {
 			for (int j = 0; j < 10; j++) {
 				if(AncienneDirection == Direction.RUNLEFT || AncienneDirection == Direction.LEFTKNIFE) {
 					direction = Direction.JUMPLEFT;
@@ -175,6 +257,6 @@ public class Pol_Cout {
 					jump_RIGHT.update(i);
 				}
 			}
-		}
+		}*/
 	}
 }

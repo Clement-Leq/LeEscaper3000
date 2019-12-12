@@ -3,17 +3,21 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.tiled.TiledMap;
 
 import Character.Character;
+import Character.Compagnon;
 import Character.Gardien;
+import Character.IA;
 import Character.Pol_Cout;
 import Maps.Maps;
 
 
 public class Jeu extends BasicGame{
 	private Character personnage;
+	private Compagnon compagnon;
 	private Maps map;
 	private Gardien mechantMur;
 	private Pol_Cout policierCouteau;
 	private Menu menu;
+	private IA ia = IA.getInstance();
 	
 	//partie Menu
 	private Image bg;
@@ -26,11 +30,11 @@ public class Jeu extends BasicGame{
 	private Music musique_Fin;
 	private Music musique_Base;
 	
-	public Jeu(String title) {
+	public Jeu(String title) throws SlickException {
 		super(title);
+		policierCouteau = Pol_Cout.getInstance();
 		map = new Maps();
 		mechantMur = new Gardien();
-		policierCouteau = new Pol_Cout();
 		personnage = new Character();
 		menu = new Menu();
 	}
@@ -50,15 +54,15 @@ public class Jeu extends BasicGame{
 	public void update(GameContainer gc, int i) throws SlickException{
 		if (!menu.isEnableStartMenu() && !menu.isEnablePauseMenu()) { 
 			mechantMur.updateGardien(gc, i);
-			policierCouteau.updateGardCout(gc, i, map);
 			personnage.updateCharacter(gc, i, map);
-			
-			if(map.isGrounded(personnage.getImg_caseX(), personnage.getImg_caseY()+64, "Sol")) {
-				personnage.setImg_caseY(personnage.getImg_caseY()+4);
-			}
+			//policierCouteau.updateGardCout(gc, i, map);
 			
 			if(map.isGrounded(policierCouteau.getImg_caseX(), policierCouteau.getImg_caseY()+81, "Sol")) {
 				policierCouteau.setImg_caseY(policierCouteau.getImg_caseY()+4);
+			}
+			
+			if(ia.isFirstJump()) {
+				ia.deplacementGardien(personnage.getImg_caseX(), personnage.getImg_caseY(), gc, i, map);
 			}
 		}
 		updateMenu(gc, i);
@@ -110,12 +114,12 @@ public class Jeu extends BasicGame{
 		}
 		if(menu.getMusic_play() == 1) {
 			musique_Fin.loop();
-			musique_Fin.setVolume(0.08f);
+			musique_Fin.setVolume(0.00f);
 			menu.setMusic_play(0);
 		}
 		else if (menu.getMusic_play() == 2) {
 			musique_Base.loop();
-			musique_Base.setVolume(0.08f);
+			musique_Base.setVolume(0.00f);
 			menu.setMusic_play(0);
 		}
 	}

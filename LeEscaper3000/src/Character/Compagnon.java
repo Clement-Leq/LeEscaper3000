@@ -3,9 +3,13 @@ import org.newdawn.slick.*;
 
 import Maps.Maps;
 
-public class Character {
-	private float img_caseX;
-	private float img_caseY;
+enum Direction{
+	idleRIGHT, idleLEFT, RUNRIGHT, RUNLEFT, JUMPRIGHT, JUMPLEFT, LEFTKNIFE, RIGHTKNIFE, FALLRIGHT, FALLLEFT
+}
+
+public class Compagnon {
+	private int img_caseX;
+	private int img_caseY;
 	private float vertical_speed;
 	private final float GRAVITY = 1f;
 	private final float TERMINAL_VELOCITY = 7;
@@ -20,31 +24,31 @@ public class Character {
 	private Animation fall_LEFT;
 	private Direction direction;
 	private Direction AncienneDirection;
-	private IA ia = IA.getInstance();
-	
-	public float getImg_caseX() {
+
+	public int getImg_caseX() {
 		return img_caseX;
 	}
 
-	public void setImg_caseX(float img_caseX) {
+	public void setImg_caseX(int img_caseX) {
 		this.img_caseX = img_caseX;
 	}
 
-	public float getImg_caseY() {
+	public int getImg_caseY() {
 		return img_caseY;
 	}
 
-	public void setImg_caseY(float img_caseY) {
+	public void setImg_caseY(int img_caseY) {
 		this.img_caseY = img_caseY;
 	}
 	
-	public Character() {
+	public Compagnon() {
 		super();
 	}
+	
 	public void renderCharacter(GameContainer gc, Graphics grphcs) {
 		
-		float posX = img_caseX;
-		float posY = img_caseY;
+		int posX = img_caseX;
+		int posY = img_caseY;
 		
 		switch(direction) {
 		case RUNRIGHT: run_RIGHT.draw(posX, posY);
@@ -54,7 +58,7 @@ public class Character {
 		case idleLEFT: idle_LEFT.draw(posX, posY);
 			break;
 		case idleRIGHT: idle_RIGHT.draw(posX, posY);
-		break;
+			break;
 		case JUMPRIGHT: jump_RIGHT.draw(posX, posY);
 			break;
 		case JUMPLEFT: jump_LEFT.draw(posX, posY);
@@ -62,69 +66,63 @@ public class Character {
 		case FALLRIGHT: fall_RIGHT.draw(posX, posY);
 			break;
 		case FALLLEFT: fall_LEFT.draw(posX, posY);
-		break;
+			break;
 		}
 	}
+	
 	public void initCharacter(GameContainer gc) {
 		try {
-			toast = new Image("./sprites/charac.png");
+			toast = new Image("./sprites/toast.png");
 		} catch (SlickException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		img_caseX = 3;
 		img_caseY = 300;
-		vertical_speed = 0;
-		run_RIGHT = getAnimationRight(0, 6, 3);
-		jump_RIGHT = getAnimationRight(0, 3 ,2);
-		fall_RIGHT = getAnimationRight(0, 3, 0);
-		idle_RIGHT = getAnimationRight(0, 1, 1);
-		run_LEFT = getAnimationLeft(5, 0, 8);
-		jump_LEFT = getAnimationLeft(5, 3, 7);
-		fall_LEFT = getAnimationLeft(5, 3, 5);
-		idle_LEFT = getAnimationLeft(5, 4, 6);
-		fall_RIGHT = getAnimationRight(0, 2, 0);		
-		fall_LEFT = getAnimationLeft(5, 3, 5);
+		idle_LEFT = getAnimation(0, 2, 0);
+		idle_RIGHT = getAnimation(9, 11, 4);
+		run_RIGHT = getAnimation(7, 11 ,5);
+		run_LEFT = getAnimation(0, 4, 1);
+		jump_RIGHT = getAnimationJump(10, 3, 6);
+		jump_LEFT = getAnimation(1, 7, 2);
 		direction = Direction.RUNLEFT;
 		AncienneDirection = direction;
 	}
-	private Animation getAnimationLeft(int dep, int max, int rowY) {
+	
+	private Animation getAnimation(int dep, int max, int rowY) {
 		Animation anim = new Animation(false);
-		for(int x = dep; x > max; x--) {
-			anim.addFrame(toast.getSubImage(x*32, rowY*64, 32, 64), 50);
+		for(int x = dep; x < max; x++) {
+			anim.addFrame(toast.getSubImage(x*64, rowY*64, 64, 64), 50);
 		}
 		return anim;
 	}
-	private Animation getAnimationRight(int dep, int max, int rowY) {
+	
+	private Animation getAnimationJump(int dep, int max, int rowY) {
 		Animation anim = new Animation(false);
-		for(int x = dep; x < max; x++) {
-			anim.addFrame(toast.getSubImage(x*32, rowY*64, 32, 64), 50);
+		for(int x = dep; x > max; x--) {
+			anim.addFrame(toast.getSubImage(x*64, rowY*64, 64, 64), 50);
 		}
 		return anim;
 	}
 	
 	public void updateCharacter(GameContainer gc, int i, Maps map) {
 		Input input = gc.getInput();
-		if(map.isGrounded((int)(img_caseX+32), (int)(img_caseY), "Sol")) {
-			img_caseX += 4;
-		}
-		if( map.isGrounded((int)(img_caseX-5), (int)(img_caseY), "Sol")) {
-			img_caseX -= 4;
-		}
-		if(input.isKeyDown(Input.KEY_A) && map.isGrounded((int)(img_caseX-5), (int)(img_caseY), "Sol")) {
+		
+		if(input.isKeyDown(Input.KEY_A)) {
 			direction = Direction.RUNLEFT;
-			img_caseX -= 4;
+			img_caseX -= 2;
 			run_LEFT.update((long) (i/2.5));
 			AncienneDirection = direction;
 		}
-		else{
+		else {
 			if(AncienneDirection == Direction.RUNLEFT) {
 				direction = Direction.idleLEFT;
 				idle_LEFT.update((long) (i/2.5));
 			}
 		}
-		if(input.isKeyDown(Input.KEY_D) && map.isGrounded((int)(img_caseX+32), (int)(img_caseY), "Sol")) {
+		if(input.isKeyDown(Input.KEY_D)) {
 			direction = Direction.RUNRIGHT;
-			img_caseX += 4;
+			img_caseX += 2;
 			run_RIGHT.update((long) (i/2.5));
 			AncienneDirection = direction;
 		}
@@ -136,36 +134,16 @@ public class Character {
 		}
 		if(input.isKeyDown(Input.KEY_SPACE)) {
 			
-			ia.setFirstJump(true);
-			ia.setJump(true);
-			ia.setPosJump(this.getImg_caseX());
-			
 			if(AncienneDirection == Direction.RUNLEFT) {
 				direction = Direction.JUMPLEFT;
-				img_caseY -= 7;
+				img_caseY -= 10;
 				jump_LEFT.update((long) (i/2.5));
 			}
 			else if(AncienneDirection == Direction.RUNRIGHT) {
 				direction = Direction.JUMPRIGHT;
-				img_caseY -= 7;
+				img_caseY -= 10 ;
 				jump_RIGHT.update((long) (i/2.5));
 			}
-		}
-		else if(map.isGrounded((int)(img_caseX), (int)(img_caseY+64), "Sol")) {
-			if(AncienneDirection == Direction.RUNRIGHT) {
-				direction = Direction.FALLRIGHT;
-				fall_RIGHT.update((long) (i/2.5));
-			}
-			if(AncienneDirection == Direction.RUNLEFT) {
-				direction = Direction.FALLLEFT;
-				fall_LEFT.update((long) (i/2.5));
-			}
-        	this.vertical_speed = (int) (this.vertical_speed + GRAVITY);
-	        if (this.vertical_speed > TERMINAL_VELOCITY)
-	        {
-	            this.vertical_speed = TERMINAL_VELOCITY;
-	        }
-	        this.img_caseY = this.img_caseY + this.vertical_speed;
 		}
 	}
 }

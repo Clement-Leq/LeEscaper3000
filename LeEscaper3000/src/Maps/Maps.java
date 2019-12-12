@@ -9,15 +9,16 @@ public class Maps {
 	public int index(String calque) {
 		return map.getLayerIndex(calque);
 	}
-	public boolean isGrounded(int x, int y,String calque) {
+	
+	public boolean isGrounded(int x, int y, String calque) {
 		if(map.getTileId(x/32, y/32, index(calque)) == 0) {
 			return true;
 		}
 		else {
 			return false;
 		}
-		
 	}
+	
 	public void iniMap() {
 		try {
 			map = new TiledMap("./maps/Java_Projet.tmx");
@@ -25,9 +26,11 @@ public class Maps {
 			e.printStackTrace();
 		}
 	}
+	
 	public void renderMap() {
 		map.render(0,0);
 	}
+	
 	public void updateMap(){
 		
 	}
