@@ -107,17 +107,17 @@ public class Character {
 	
 	public void updateCharacter(GameContainer gc, int i, Maps map) {
 		Input input = gc.getInput();
-		if(map.isGrounded((int)(img_caseX+32), (int)(img_caseY), "Sol")) {
-			img_caseX += 4;
+		if(!map.isGrounded((int)(img_caseX), (int)(img_caseY+50), "Sol") && AncienneDirection == Direction.RUNLEFT) {
+			img_caseX += 6;
 		}
-		if( map.isGrounded((int)(img_caseX-5), (int)(img_caseY), "Sol")) {
-			img_caseX -= 4;
+		if(!map.isGrounded((int)(img_caseX+32), (int)(img_caseY+50), "Sol") && AncienneDirection == Direction.RUNRIGHT) {
+			img_caseX -= 6;
 		}
 		if(input.isKeyDown(Input.KEY_A) && map.isGrounded((int)(img_caseX-5), (int)(img_caseY), "Sol")) {
 			direction = Direction.RUNLEFT;
+			AncienneDirection = direction;
 			img_caseX -= 4;
 			run_LEFT.update((long) (i/2.5));
-			AncienneDirection = direction;
 		}
 		else{
 			if(AncienneDirection == Direction.RUNLEFT) {
@@ -127,9 +127,9 @@ public class Character {
 		}
 		if(input.isKeyDown(Input.KEY_D) && map.isGrounded((int)(img_caseX+32), (int)(img_caseY), "Sol")) {
 			direction = Direction.RUNRIGHT;
+			AncienneDirection = direction;
 			img_caseX += 4;
 			run_RIGHT.update((long) (i/2.5));
-			AncienneDirection = direction;
 		}
 		else {
 			if(AncienneDirection == Direction.RUNRIGHT) {
@@ -150,6 +150,12 @@ public class Character {
 			}
 		}
 		else if(map.isGrounded((int)(img_caseX), (int)(img_caseY+64), "Sol")) {
+			this.vertical_speed = (int) (vertical_speed + GRAVITY);
+	        if (vertical_speed > TERMINAL_VELOCITY)
+	        {
+	            vertical_speed = TERMINAL_VELOCITY;
+	        }
+	        img_caseY = img_caseY + vertical_speed;
 			if(AncienneDirection == Direction.RUNRIGHT) {
 				direction = Direction.FALLRIGHT;
 				fall_RIGHT.update((long) (i/2.5));
@@ -158,12 +164,7 @@ public class Character {
 				direction = Direction.FALLLEFT;
 				fall_LEFT.update((long) (i/2.5));
 			}
-        	this.vertical_speed = (int) (this.vertical_speed + GRAVITY);
-	        if (this.vertical_speed > TERMINAL_VELOCITY)
-	        {
-	            this.vertical_speed = TERMINAL_VELOCITY;
-	        }
-	        this.img_caseY = this.img_caseY + this.vertical_speed;
+        	
 		}
 	}
 }
