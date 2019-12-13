@@ -1,7 +1,7 @@
 import org.newdawn.slick.*;
 import Character.Character;
 import Maps.Maps;
-
+ 
 
 public class Jeu extends BasicGame{
 	private Character personnage;
@@ -14,6 +14,7 @@ public class Jeu extends BasicGame{
 	}
 
 	public void render(GameContainer gc, Graphics grphcs){
+		grphcs.translate(-personnage.getImg_caseX()+600, 0);
 		map.renderMap();
 		personnage.renderCharacter(gc, grphcs);
 	}
