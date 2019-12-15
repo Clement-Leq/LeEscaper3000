@@ -22,6 +22,13 @@ public class Character {
 	private Direction AncienneDirection;
 	private IA ia = IA.getInstance();
 	
+	private static class Singleton{
+		private static Character INSTANCE = new Character();
+	}
+	public static Character getInstance() {
+		return Singleton.INSTANCE;
+	}
+	
 	public float getImg_caseX() {
 		return img_caseX;
 	}
@@ -71,7 +78,7 @@ public class Character {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
-		img_caseX = 3;
+		img_caseX = 750;
 		img_caseY = 300;
 		vertical_speed = 0;
 		run_RIGHT = getAnimationRight(0, 6, 3);
@@ -137,8 +144,12 @@ public class Character {
 		if(input.isKeyDown(Input.KEY_SPACE)) {
 			
 			ia.setFirstJump(true);
-			ia.setJump(true);
-			ia.setPosJump(this.getImg_caseX());
+			
+			if(ia.isEstSurSol()) {
+				ia.setJump(true);
+				ia.setPosJump(this.getImg_caseX(), this.getImg_caseY());
+				ia.setEstSurSol(false);
+			}
 			
 			if(AncienneDirection == Direction.RUNLEFT) {
 				direction = Direction.JUMPLEFT;

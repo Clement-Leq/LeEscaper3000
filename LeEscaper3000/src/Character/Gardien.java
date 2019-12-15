@@ -23,12 +23,12 @@ public class Gardien {
 	public void renderGardien(GameContainer gc, Graphics grphcs) {
 		int posX = img_caseX;
 		int posY = img_caseY;
-		anim_muscles.draw(9 * 32, 11 * 32);
+		anim_muscles.draw(14 * 32, 11 * 32);
 	}
 	public void initGardien(GameContainer gc) throws SlickException {
 		gardien = new Image("./sprites/Police_mur_gros(1).png");
 		
-		img_caseX = 150;
+		img_caseX = 300;
 		img_caseY = 300;
 		anim_muscles = getAnimationStop(0, 27, 0);
 		direction = Direction.RUNLEFT;

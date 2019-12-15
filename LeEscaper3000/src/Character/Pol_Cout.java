@@ -91,7 +91,7 @@ public class Pol_Cout {
 	public void initGardCout(GameContainer gc) throws SlickException {
 		gardienRight = new Image("./sprites/Police_couteau_right.png");
 		gardienLeft = new Image("./sprites/Police_couteau_left.png");
-		img_caseX = 150;
+		img_caseX = 610;
 		img_caseY = 300;
 		
 		idle_RIGHT = getAnimationRight(0, 1, 0);
@@ -155,7 +155,7 @@ public class Pol_Cout {
 		}
 	}
 	
-	public void depDroite(GameContainer gc, int i, Maps map) {
+	public void depDroite(GameContainer gc, int i) {
 		//Input input = gc.getInput();
 		 
 		direction = Direction.RUNRIGHT; 
@@ -164,21 +164,14 @@ public class Pol_Cout {
 		anim_ARM_R.update(i);
 		AncienneDirection = direction;
 
-		/*if(input.isKeyDown(Input.KEY_LSHIFT) && (AncienneDirection == Direction.RUNRIGHT || AncienneDirection == Direction.RIGHTKNIFE)) {
-			direction = Direction.RIGHTKNIFE;
-			anim_KNIFE_R.update(i/2);
-			AncienneDirection = direction;
-		}
-		else {
-			if(AncienneDirection == Direction.RUNRIGHT || AncienneDirection == Direction.RIGHTKNIFE) {
-				direction = Direction.idleRIGHT;
-				idle_RIGHT.update((long) (i/2.5));
-				idle_ARM_RIGHT.update((long) (i/2.5));
-			}
+		/*if(AncienneDirection == Direction.RUNRIGHT || AncienneDirection == Direction.RIGHTKNIFE) {
+			direction = Direction.idleRIGHT;
+			idle_RIGHT.update((long) (i/2.5));
+			idle_ARM_RIGHT.update((long) (i/2.5));
 		}*/
 	}
 	
-	public void depGauche(GameContainer gc, int i, Maps map) {
+	public void depGauche(GameContainer gc, int i) {
 		//Input input = gc.getInput();
 		
 		direction = Direction.RUNLEFT;
@@ -187,11 +180,7 @@ public class Pol_Cout {
 		anim_ARM_L.update(i);
 		AncienneDirection = direction;
 		
-		/*if(input.isKeyDown(Input.KEY_LSHIFT) && (AncienneDirection == Direction.RUNLEFT || AncienneDirection == Direction.LEFTKNIFE)) {
-			direction = Direction.LEFTKNIFE;
-			anim_KNIFE_L.update(i/2);
-			AncienneDirection = direction;
-		}
+		/*
 		else {
 			if(AncienneDirection == Direction.LEFTKNIFE || AncienneDirection == Direction.RUNLEFT) {
 				direction = Direction.idleLEFT;
@@ -199,6 +188,19 @@ public class Pol_Cout {
 				idle_ARM_LEFT.update((long) (i/2.5));
 			}
 		}*/
+	}
+	
+	public void couteau(GameContainer gc, int i) {
+		if(AncienneDirection == Direction.RUNRIGHT || AncienneDirection == Direction.RIGHTKNIFE) {
+			direction = Direction.RIGHTKNIFE;
+			anim_KNIFE_R.update(i/2);
+			AncienneDirection = direction;
+		}
+		else if (AncienneDirection == Direction.RUNLEFT || AncienneDirection == Direction.LEFTKNIFE) {
+			direction = Direction.LEFTKNIFE;
+			anim_KNIFE_L.update(i/2);
+			AncienneDirection = direction;
+		}
 	}
 	
 	public void updateGardCout(GameContainer gc, int i, Maps map) {

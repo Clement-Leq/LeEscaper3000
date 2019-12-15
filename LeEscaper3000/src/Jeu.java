@@ -1,5 +1,6 @@
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.tiled.TiledMap;
 
 import Character.Character;
@@ -11,7 +12,7 @@ import Maps.Maps;
 
 
 public class Jeu extends BasicGame{
-	private Character personnage;
+	private Character personnage = Character.getInstance();
 	private Compagnon compagnon;
 	private Maps map;
 	private Gardien mechantMur;
@@ -35,7 +36,7 @@ public class Jeu extends BasicGame{
 		policierCouteau = Pol_Cout.getInstance();
 		map = new Maps();
 		mechantMur = new Gardien();
-		personnage = new Character();
+		//personnage = new Character();
 		menu = new Menu();
 	}
 
@@ -59,6 +60,7 @@ public class Jeu extends BasicGame{
 			
 			if(map.isGrounded(policierCouteau.getImg_caseX(), policierCouteau.getImg_caseY()+81, "Sol")) {
 				policierCouteau.setImg_caseY(policierCouteau.getImg_caseY()+4);
+				ia.setEstSurSol(true);
 			}
 			
 			if(ia.isFirstJump()) {
@@ -79,7 +81,6 @@ public class Jeu extends BasicGame{
 			menu.menuStart(gc, playBg, exitGame, this);
 		}
 		else {
-			renderJeu(gc, grphcs);
 			menu.menuPause(gc, grphcs, menuPause, menuBtn, back, this);
 		}
 	}
@@ -96,6 +97,7 @@ public class Jeu extends BasicGame{
 		}
 		if((posX > 100 && posX < 300) && (posY > 624 && posY < 669)) {
 			menu.setMouseOnPlay(true);
+			ia.setFirstJump(false);
 		}
 		else if((posX > 99 && posX < 128) && (posY > 541 && posY < 568)) {
 			menu.setMouseOnExit(true);
@@ -114,12 +116,12 @@ public class Jeu extends BasicGame{
 		}
 		if(menu.getMusic_play() == 1) {
 			musique_Fin.loop();
-			musique_Fin.setVolume(0.00f);
+			musique_Fin.setVolume(0.30f);
 			menu.setMusic_play(0);
 		}
 		else if (menu.getMusic_play() == 2) {
 			musique_Base.loop();
-			musique_Base.setVolume(0.00f);
+			musique_Base.setVolume(0.50f);
 			menu.setMusic_play(0);
 		}
 	}
@@ -139,9 +141,11 @@ public class Jeu extends BasicGame{
 	}
 	
 	public void renderJeu(GameContainer gc, Graphics grphcs) {
+		grphcs.translate(-personnage.getImg_caseX()+600, 0);
 		map.renderMap();
 		mechantMur.renderGardien(gc, grphcs);
 		policierCouteau.renderGardCout(gc, grphcs);
 		personnage.renderCharacter(gc, grphcs);
+		//ia.dessinerRectangles(grphcs);
 	}
 }
