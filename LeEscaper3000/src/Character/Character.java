@@ -1,7 +1,10 @@
 package Character;
 import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Rectangle;
 
 import Maps.Maps;
+import Piege.ListePique;
+import Piege.Pique;
 
 enum Direction{
 	idleRIGHT, idleLEFT, RUNRIGHT, RUNLEFT, JUMPRIGHT, JUMPLEFT, FALLRIGHT, FALLLEFT
@@ -68,6 +71,7 @@ public class Character {
 		break;
 		}
 	}
+
 	public void initCharacter(GameContainer gc) {
 		try {
 			toast = new Image("./sprites/charac.png");
@@ -104,9 +108,18 @@ public class Character {
 		}
 		return anim;
 	}
-	
-	public void updateCharacter(GameContainer gc, int i, Maps map) {
+    private Rectangle getRectanglePerso() {
+        float PersoPosX = img_caseX;
+        float PersoPosY = img_caseY+20;
+        float PersoTailleX = 32;
+        float PersoTailleY = 44;
+        return new Rectangle(PersoPosX, PersoPosY, PersoTailleX, PersoTailleY);
+    }
+	public void updateCharacter(GameContainer gc, int i, Maps map, ListePique pique) {
 		Input input = gc.getInput();
+		//if(getRectanglePerso().intersects(arg0)) {
+			
+		//}
 		if(!map.isGrounded((int)(img_caseX), (int)(img_caseY+50), "Sol") && AncienneDirection == Direction.RUNLEFT) {
 			img_caseX += 6;
 		}
@@ -128,7 +141,7 @@ public class Character {
 		if(input.isKeyDown(Input.KEY_D) && map.isGrounded((int)(img_caseX+32), (int)(img_caseY), "Sol")) {
 			direction = Direction.RUNRIGHT;
 			AncienneDirection = direction;
-			img_caseX += 4;
+			img_caseX += 10;
 			run_RIGHT.update((long) (i/2.5));
 		}
 		else {
@@ -149,7 +162,7 @@ public class Character {
 				jump_RIGHT.update((long) (i/2.5));
 			}
 		}
-		else if(map.isGrounded((int)(img_caseX), (int)(img_caseY+64), "Sol")) {
+		else if(map.isGrounded((int)(img_caseX), (int)(img_caseY+64), "Sol") && map.isGrounded((int)(img_caseX), (int)(img_caseY+64), "Obstacles") ) {
 			this.vertical_speed = (int) (vertical_speed + GRAVITY);
 	        if (vertical_speed > TERMINAL_VELOCITY)
 	        {

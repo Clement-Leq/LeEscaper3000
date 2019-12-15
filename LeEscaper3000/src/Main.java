@@ -7,7 +7,7 @@ import org.newdawn.slick.SlickException;
 public class Main {
 
 	public static void main(String[] args) {
-		int largeurAffichage = 3000;
+		int largeurAffichage = 1024;
 		int hauteurAffichage = 768;
 		boolean siPleinEcran = false;
 		try {
