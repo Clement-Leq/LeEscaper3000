@@ -1,18 +1,14 @@
 package Character;
-
 import org.newdawn.slick.*;
+
 import Maps.Maps;
 import Piege.ListePique;
 
-//enum de toute les direction du personnage
-enum Direction{
-	idleRIGHT, idleLEFT, RUNRIGHT, RUNLEFT, JUMPRIGHT, JUMPLEFT, FALLRIGHT, FALLLEFT
-}
 
-//creation de toutes les variables
 public class Character {
-	private float img_caseX;
-	private float img_caseY;
+	//creation de toutes les variables
+	private float img_caseX = 0;
+	private float img_caseY = 0;
 	private float vertical_speed;
 	private final float GRAVITY = 1f;
 	private final float TERMINAL_VELOCITY = 7;
@@ -27,7 +23,14 @@ public class Character {
 	private Animation fall_LEFT;
 	private Direction direction;
 	private Direction AncienneDirection;
+	private IA ia;
 	
+	private static class Singleton{
+		private static Character INSTANCE = new Character();
+	}
+	public static Character getInstance() {
+		return Singleton.INSTANCE;
+	}
 	//getter et setter des coordonnées du personnage
 	public float getImg_caseX() {
 		return img_caseX;
@@ -47,6 +50,7 @@ public class Character {
 	
 	public Character() {
 		super();
+		ia = IA.getInstance();
 	}
 	public void renderCharacter(GameContainer gc, Graphics grphcs) {
 		
@@ -61,7 +65,7 @@ public class Character {
 		case idleLEFT: idle_LEFT.draw(posX, posY);
 			break;
 		case idleRIGHT: idle_RIGHT.draw(posX, posY);
-		break;
+			break;
 		case JUMPRIGHT: jump_RIGHT.draw(posX, posY);
 			break;
 		case JUMPLEFT: jump_LEFT.draw(posX, posY);
@@ -69,7 +73,7 @@ public class Character {
 		case FALLRIGHT: fall_RIGHT.draw(posX, posY);
 			break;
 		case FALLLEFT: fall_LEFT.draw(posX, posY);
-		break;
+			break;
 		}
 	}
 	//initialisation de toute les variables
@@ -79,7 +83,7 @@ public class Character {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
-		img_caseX = 3;
+		img_caseX = 750;
 		img_caseY = 300;
 		vertical_speed = 0;
 		run_RIGHT = getAnimationRight(0, 6, 3);
@@ -110,7 +114,7 @@ public class Character {
 		}
 		return anim;
 	}
-
+	
 	public void updateCharacter(GameContainer gc, int i, Maps map, ListePique pique) {
 		Input input = gc.getInput();
 		//si le perso va a droite ou a gauche et qu'il y a un mur il est repoussé dans la direction opposé
