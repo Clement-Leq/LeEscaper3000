@@ -100,7 +100,7 @@ public class IA {
 
         return siTouche;
     }
-	
+
 	public void deplacementGardien(float posX_Player, float posY_Player, GameContainer gc, int i, Maps map) {
 		//System.out.println(policierCouteau.getImg_caseX());
 		//System.out.println(policierCouteau.getImg_caseY());
