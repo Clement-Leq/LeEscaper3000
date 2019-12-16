@@ -1,15 +1,15 @@
 package Character;
-import org.newdawn.slick.*;
-import org.newdawn.slick.geom.Rectangle;
 
+import org.newdawn.slick.*;
 import Maps.Maps;
 import Piege.ListePique;
-import Piege.Pique;
 
+//enum de toute les direction du personnage
 enum Direction{
 	idleRIGHT, idleLEFT, RUNRIGHT, RUNLEFT, JUMPRIGHT, JUMPLEFT, FALLRIGHT, FALLLEFT
 }
 
+//creation de toutes les variables
 public class Character {
 	private float img_caseX;
 	private float img_caseY;
@@ -28,6 +28,7 @@ public class Character {
 	private Direction direction;
 	private Direction AncienneDirection;
 	
+	//getter et setter des coordonnées du personnage
 	public float getImg_caseX() {
 		return img_caseX;
 	}
@@ -51,7 +52,7 @@ public class Character {
 		
 		float posX = img_caseX;
 		float posY = img_caseY;
-		
+		//en fonction des direction on dessine la direction du personnage
 		switch(direction) {
 		case RUNRIGHT: run_RIGHT.draw(posX, posY);
 			break;
@@ -71,7 +72,7 @@ public class Character {
 		break;
 		}
 	}
-
+	//initialisation de toute les variables
 	public void initCharacter(GameContainer gc) {
 		try {
 			toast = new Image("./sprites/charac.png");
@@ -94,6 +95,7 @@ public class Character {
 		direction = Direction.RUNLEFT;
 		AncienneDirection = direction;
 	}
+	//methode pour get une animation sur une spritesheet
 	private Animation getAnimationLeft(int dep, int max, int rowY) {
 		Animation anim = new Animation(false);
 		for(int x = dep; x > max; x--) {
@@ -111,36 +113,43 @@ public class Character {
 
 	public void updateCharacter(GameContainer gc, int i, Maps map, ListePique pique) {
 		Input input = gc.getInput();
-		if(map.isGrounded((int)(img_caseX), (int)(img_caseY+50), "Sol") && AncienneDirection == Direction.RUNLEFT) {
+		//si le perso va a droite ou a gauche et qu'il y a un mur il est repoussé dans la direction opposé
+		if(!map.isGrounded((int)(img_caseX), (int)(img_caseY+50), "Sol") && AncienneDirection == Direction.RUNLEFT) { 
 			img_caseX += 6;
 		}
-		if(map.isGrounded((int)(img_caseX+32), (int)(img_caseY+50), "Sol") && AncienneDirection == Direction.RUNRIGHT) {
+		if(!map.isGrounded((int)(img_caseX+32), (int)(img_caseY+50), "Sol") && AncienneDirection == Direction.RUNRIGHT) {
 			img_caseX -= 6;
 		}
+		//si la touche A est enfoncé et qu'il n'y a pas de mur il peut avancer
 		if(input.isKeyDown(Input.KEY_A) && map.isGrounded((int)(img_caseX-5), (int)(img_caseY), "Sol")) {
 			direction = Direction.RUNLEFT;
 			AncienneDirection = direction;
 			img_caseX -= 4;
 			run_LEFT.update((long) (i/2.5));
 		}
+		//sinon il reste sur place
+		
 		else{
 			if(AncienneDirection == Direction.RUNLEFT) {
 				direction = Direction.idleLEFT;
 				idle_LEFT.update((long) (i/2.5));
 			}
 		}
+		//si la touche D est enfoncé et qu'il n'y a pas de mur
 		if(input.isKeyDown(Input.KEY_D) && map.isGrounded((int)(img_caseX+32), (int)(img_caseY), "Sol")) {
 			direction = Direction.RUNRIGHT;
 			AncienneDirection = direction;
 			img_caseX += 4;
 			run_RIGHT.update((long) (i/2.5));
 		}
+		//sinon il reste sur place
 		else {
 			if(AncienneDirection == Direction.RUNRIGHT) {
 				direction = Direction.idleRIGHT;
 				idle_RIGHT.update((long) (i/2.5));
 			}
 		}
+		//si la barre espace est enfoncé il saute en fonction de l'ancienne direction
 		if(input.isKeyDown(Input.KEY_SPACE)) {
 			if(AncienneDirection == Direction.RUNLEFT) {
 				direction = Direction.JUMPLEFT;
@@ -153,6 +162,7 @@ public class Character {
 				jump_RIGHT.update((long) (i/2.5));
 			}
 		}
+		//sinon si le perso est dans les airs il retombe avec tournée dans l'ancienne direction du perso (gravité)
 		else if(map.isGrounded((int)(img_caseX), (int)(img_caseY+64), "Sol") && map.isGrounded((int)(img_caseX), (int)(img_caseY+64), "Obstacles") ) {
 			this.vertical_speed = (int) (vertical_speed + GRAVITY);
 	        if (vertical_speed > TERMINAL_VELOCITY)
