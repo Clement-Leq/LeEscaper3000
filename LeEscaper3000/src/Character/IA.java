@@ -4,23 +4,21 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Vector2f;
-import org.newdawn.slick.tiled.TiledMap;
 
 import Maps.Maps;
 
 public class IA {
 
-	private Pol_Cout policierCouteau = Pol_Cout.getInstance();
-	private Character personnage = Character.getInstance();
-	private boolean firstJump = false;
-	private boolean estSurSol = false;
+	private Pol_Cout policierCouteau;
+	private Character personnage;;
 	private boolean jump = false;
+	private boolean startPolice = false;
+	private int debutTemps = 0;
+	private final int TEMPSTARTPOLICE = 25;
 	private boolean couteauActif = false;
-	private float posJumpX = 0;
-	private float posJumpY = 0;
 	private int debut = 0;
 	private final int DUREEANIM = 25;
+	private int nbVie = 3;
 	
 	private static class Singleton{
 		private static IA INSTANCE = new IA();
@@ -29,33 +27,28 @@ public class IA {
 		return Singleton.INSTANCE;
 	}
 	
+	public int getNbVie() {
+		return nbVie;
+	}
+	
+	public void setNbVie(int nbVie) {
+		this.nbVie = nbVie;
+	}
+
 	public boolean isCouteauActif() {
 		return couteauActif;
 	}
 
+	public boolean isStartPolice() {
+		return startPolice;
+	}
+
+	public void setStartPolice(boolean startPolice) {
+		this.startPolice = startPolice;
+	}
+
 	public void setCouteauActif(boolean couteauActif) {
 		this.couteauActif = couteauActif;
-	}
-
-	public boolean isEstSurSol() {
-		return estSurSol;
-	}
-
-	public void setEstSurSol(boolean estSurSol) {
-		this.estSurSol = estSurSol;
-	}
-
-	public float getPosJumpX() {
-		return posJumpX;
-	}
-	
-	public float getPosJumpY() {
-		return posJumpY;
-	}
-
-	public void setPosJump(float posJumpX, float posJumpY) {
-		this.posJumpX = posJumpX;
-		this.posJumpY = posJumpY;
 	}
 
 	public boolean isJump() {
@@ -65,17 +58,11 @@ public class IA {
 	public void setJump(boolean jump) {
 		this.jump = jump;
 	}
-
-	public boolean isFirstJump() {
-		return firstJump;
-	}
-
-	public void setFirstJump(boolean firstJump) {
-		this.firstJump = firstJump;
-	}
-
+	
 	public IA() {
 		// TODO Auto-generated constructor stub
+		policierCouteau = Pol_Cout.getInstance();
+		personnage = Character.getInstance();
 	}
 	
 	private Rectangle getRectanglePolice() {
@@ -95,10 +82,10 @@ public class IA {
 	
 	public void dessinerRectangles(Graphics grphcs) {
         grphcs.setColor(Color.white);
-        Rectangle rectangleLoki = getRectanglePolice();
-        Rectangle rectangleProjectile = getRectanglePerso();
-        grphcs.draw(rectangleLoki);
-        grphcs.draw(rectangleProjectile);
+        Rectangle rectanglePolice = getRectanglePolice();
+        Rectangle rectanglePerso = getRectanglePerso();
+        grphcs.draw(rectanglePolice);
+        grphcs.draw(rectanglePerso);
     }
 	
 	public boolean siAttaqueTouche() {
@@ -122,6 +109,9 @@ public class IA {
 			policierCouteau.couteau(gc, i);
 			debut += 1;
 			if(debut > DUREEANIM) {
+				if(this.siAttaqueTouche()) {
+					this.setNbVie(this.getNbVie() - 1);
+				}
 				this.setCouteauActif(false);
 				debut = 0;
 			}			
@@ -143,7 +133,7 @@ public class IA {
 			}*/
 			if (policierCouteau.getImg_caseY() > posY_Player) {
 				policierCouteau.jump(gc, i, map);
-				policierCouteau.setImg_caseX(policierCouteau.getImg_caseX()+10);
+				policierCouteau.setImg_caseX(policierCouteau.getImg_caseX()+8);
 			}
 			else if ((policierCouteau.getImg_caseY() <= posY_Player-16) && (policierCouteau.getImg_caseX() < posX_Player)) {
 				policierCouteau.depDroite(gc, i);
@@ -154,6 +144,13 @@ public class IA {
 		}
 	}
 	
+	public void updateIA () {
+		debutTemps += 1;
+		if(debutTemps > TEMPSTARTPOLICE) {
+			this.setStartPolice(true);
+			debutTemps = 0;
+		}		
+	}
 	public void jump(GameContainer gc, int i, Maps map) {
 		policierCouteau.jump(gc, i, map);
 	}

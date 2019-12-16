@@ -4,8 +4,8 @@ import org.newdawn.slick.*;
 import Maps.Maps;
 
 public class Character {
-	private float img_caseX;
-	private float img_caseY;
+	private float img_caseX = 0;
+	private float img_caseY = 0;
 	private float vertical_speed;
 	private final float GRAVITY = 1f;
 	private final float TERMINAL_VELOCITY = 7;
@@ -20,7 +20,7 @@ public class Character {
 	private Animation fall_LEFT;
 	private Direction direction;
 	private Direction AncienneDirection;
-	private IA ia = IA.getInstance();
+	private IA ia;
 	
 	private static class Singleton{
 		private static Character INSTANCE = new Character();
@@ -47,6 +47,7 @@ public class Character {
 	
 	public Character() {
 		super();
+		ia = IA.getInstance();
 	}
 	public void renderCharacter(GameContainer gc, Graphics grphcs) {
 		
@@ -61,7 +62,7 @@ public class Character {
 		case idleLEFT: idle_LEFT.draw(posX, posY);
 			break;
 		case idleRIGHT: idle_RIGHT.draw(posX, posY);
-		break;
+			break;
 		case JUMPRIGHT: jump_RIGHT.draw(posX, posY);
 			break;
 		case JUMPLEFT: jump_LEFT.draw(posX, posY);
@@ -69,7 +70,7 @@ public class Character {
 		case FALLRIGHT: fall_RIGHT.draw(posX, posY);
 			break;
 		case FALLLEFT: fall_LEFT.draw(posX, posY);
-		break;
+			break;
 		}
 	}
 	public void initCharacter(GameContainer gc) {
@@ -142,14 +143,6 @@ public class Character {
 			}
 		}
 		if(input.isKeyDown(Input.KEY_SPACE)) {
-			
-			ia.setFirstJump(true);
-			
-			if(ia.isEstSurSol()) {
-				ia.setJump(true);
-				ia.setPosJump(this.getImg_caseX(), this.getImg_caseY());
-				ia.setEstSurSol(false);
-			}
 			
 			if(AncienneDirection == Direction.RUNLEFT) {
 				direction = Direction.JUMPLEFT;

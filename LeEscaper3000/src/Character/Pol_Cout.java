@@ -21,7 +21,7 @@ public class Pol_Cout {
 	private Animation anim_ARM_L;
 	private Animation jump_RIGHT;
 	private Animation jump_LEFT;
-	private IA ia = IA.getInstance();
+	private IA ia;
 	private Direction direction;
 	private Direction AncienneDirection;
 	
@@ -43,6 +43,7 @@ public class Pol_Cout {
 
 	public Pol_Cout() {
 		super();
+		ia = IA.getInstance();
 	}	
 	
 	private static class Singleton{
@@ -225,8 +226,8 @@ public class Pol_Cout {
 				idle_ARM_LEFT.update((long) (i/2.5));
 			}
 		}
-		System.out.println(ia.isFirstJump() + " : FJ_Cout");
-		if(ia.isFirstJump()) {
+		
+		if(ia.isStartPolice()) {
 			direction = Direction.RUNRIGHT;
 			img_caseX += 5;
 			anim_RIGHT.update(i);

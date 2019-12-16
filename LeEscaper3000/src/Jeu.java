@@ -1,24 +1,19 @@
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.tiled.TiledMap;
 
+import Character.*;
 import Character.Character;
-import Character.Compagnon;
-import Character.Gardien;
-import Character.IA;
-import Character.Pol_Cout;
 import Maps.Maps;
 
 
 public class Jeu extends BasicGame{
-	private Character personnage = Character.getInstance();
+	private Character personnage;
 	private Compagnon compagnon;
 	private Maps map;
 	private Gardien mechantMur;
 	private Pol_Cout policierCouteau;
 	private Menu menu;
-	private IA ia = IA.getInstance();
+	private IA ia;
 	
 	//partie Menu
 	private Image bg;
@@ -28,11 +23,18 @@ public class Jeu extends BasicGame{
 	private Image menuPause;
 	private Image menuBtn;
 	private Image back;
+	private Image hp;
+	private Image hpFull;
+	private Image hpPanel;
+	private Image retryBg;
+	private Image retry;
 	private Music musique_Fin;
 	private Music musique_Base;
 	
 	public Jeu(String title) throws SlickException {
 		super(title);
+		ia = IA.getInstance();
+		personnage = Character.getInstance();
 		policierCouteau = Pol_Cout.getInstance();
 		map = new Maps();
 		mechantMur = new Gardien();
@@ -53,17 +55,16 @@ public class Jeu extends BasicGame{
 	}
 	
 	public void update(GameContainer gc, int i) throws SlickException{
-		if (!menu.isEnableStartMenu() && !menu.isEnablePauseMenu()) { 
+		ia.updateIA();
+		if (!menu.isEnableStartMenu() && !menu.isEnablePauseMenu() && !menu.isFini()) { 
 			mechantMur.updateGardien(gc, i);
 			personnage.updateCharacter(gc, i, map);
 			//policierCouteau.updateGardCout(gc, i, map);
 			
 			if(map.isGrounded(policierCouteau.getImg_caseX(), policierCouteau.getImg_caseY()+81, "Sol")) {
 				policierCouteau.setImg_caseY(policierCouteau.getImg_caseY()+4);
-				ia.setEstSurSol(true);
 			}
-			
-			if(ia.isFirstJump()) {
+			if(ia.isStartPolice()) {
 				ia.deplacementGardien(personnage.getImg_caseX(), personnage.getImg_caseY(), gc, i, map);
 			}
 		}
@@ -79,6 +80,9 @@ public class Jeu extends BasicGame{
 			play.draw(100, 100);
 			exitGame.draw(100, 200);
 			menu.menuStart(gc, playBg, exitGame, this);
+		}
+		else if (menu.isFini()) {
+			menu.menuFini(gc, grphcs, retry, retryBg, this);
 		}
 		else {
 			menu.menuPause(gc, grphcs, menuPause, menuBtn, back, this);
@@ -97,7 +101,7 @@ public class Jeu extends BasicGame{
 		}
 		if((posX > 100 && posX < 300) && (posY > 624 && posY < 669)) {
 			menu.setMouseOnPlay(true);
-			ia.setFirstJump(false);
+			ia.setStartPolice(false);
 		}
 		else if((posX > 99 && posX < 128) && (posY > 541 && posY < 568)) {
 			menu.setMouseOnExit(true);
@@ -108,11 +112,15 @@ public class Jeu extends BasicGame{
 		else if((posX > 641 && posX < 782) && (posY > 226 && posY < 286)) {
 			menu.setMouseOnBack(true);
 		}
+		else if((posX > 605 && posX < 755) && (posY > 363 && posY < 433)) {
+			menu.setMouseOnRetry(true);
+		}
 		else {
 			menu.setMouseOnPlay(false);
 			menu.setMouseOnExit(false);
 			menu.setMouseOnMenu(false);
 			menu.setMouseOnBack(false);
+			menu.setMouseOnRetry(false);
 		}
 		if(menu.getMusic_play() == 1) {
 			musique_Fin.loop();
@@ -136,7 +144,11 @@ public class Jeu extends BasicGame{
 		back = new Image("./images/BTN_BACK.png");
 		musique_Fin = new Music("./audio/Credit_Theme.wav");
 		musique_Base = new Music("./audio/Base_Theme.wav");
-		
+		hp = new Image("./images/HP.png");
+		hpFull = new Image("./images/HP_FULL.png");
+		hpPanel = new Image("./images/HP_PANEL.png");
+		retry = new Image("./images/BTN_Retry.png");
+		retryBg = new Image("./images/BG_MORT.png");
 		map.iniMap();
 	}
 	
@@ -146,6 +158,8 @@ public class Jeu extends BasicGame{
 		mechantMur.renderGardien(gc, grphcs);
 		policierCouteau.renderGardCout(gc, grphcs);
 		personnage.renderCharacter(gc, grphcs);
-		//ia.dessinerRectangles(grphcs);
+		//System.out.println(personnage.getImg_caseX());
+		ia.dessinerRectangles(grphcs);
+		menu.gestionHp(hpPanel, hp, hpFull, retry, retryBg);
 	}
 }
