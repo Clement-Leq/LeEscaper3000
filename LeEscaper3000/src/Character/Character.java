@@ -108,22 +108,13 @@ public class Character {
 		}
 		return anim;
 	}
-    private Rectangle getRectanglePerso() {
-        float PersoPosX = img_caseX;
-        float PersoPosY = img_caseY+20;
-        float PersoTailleX = 32;
-        float PersoTailleY = 44;
-        return new Rectangle(PersoPosX, PersoPosY, PersoTailleX, PersoTailleY);
-    }
+
 	public void updateCharacter(GameContainer gc, int i, Maps map, ListePique pique) {
 		Input input = gc.getInput();
-		if(getRectanglePerso().intersects(pique.getListRec())) {
-			
-		}
-		if(!map.isGrounded((int)(img_caseX), (int)(img_caseY+50), "Sol") && AncienneDirection == Direction.RUNLEFT) {
+		if(map.isGrounded((int)(img_caseX), (int)(img_caseY+50), "Sol") && AncienneDirection == Direction.RUNLEFT) {
 			img_caseX += 6;
 		}
-		if(!map.isGrounded((int)(img_caseX+32), (int)(img_caseY+50), "Sol") && AncienneDirection == Direction.RUNRIGHT) {
+		if(map.isGrounded((int)(img_caseX+32), (int)(img_caseY+50), "Sol") && AncienneDirection == Direction.RUNRIGHT) {
 			img_caseX -= 6;
 		}
 		if(input.isKeyDown(Input.KEY_A) && map.isGrounded((int)(img_caseX-5), (int)(img_caseY), "Sol")) {
@@ -141,7 +132,7 @@ public class Character {
 		if(input.isKeyDown(Input.KEY_D) && map.isGrounded((int)(img_caseX+32), (int)(img_caseY), "Sol")) {
 			direction = Direction.RUNRIGHT;
 			AncienneDirection = direction;
-			img_caseX += 20;
+			img_caseX += 4;
 			run_RIGHT.update((long) (i/2.5));
 		}
 		else {
