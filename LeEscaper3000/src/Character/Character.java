@@ -117,9 +117,9 @@ public class Character {
     }
 	public void updateCharacter(GameContainer gc, int i, Maps map, ListePique pique) {
 		Input input = gc.getInput();
-		//if(getRectanglePerso().intersects(arg0)) {
+		if(getRectanglePerso().intersects(pique.getListRec())) {
 			
-		//}
+		}
 		if(!map.isGrounded((int)(img_caseX), (int)(img_caseY+50), "Sol") && AncienneDirection == Direction.RUNLEFT) {
 			img_caseX += 6;
 		}

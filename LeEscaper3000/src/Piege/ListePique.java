@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Rectangle;
 
 import Maps.Maps;
 
@@ -15,7 +16,12 @@ public class ListePique {
 	public ListePique() {
 		arrayPiques = new ArrayList<Pique>();
 	}
-
+	public Rectangle getListRec() {
+		for (int i = 0; i < arrayPiques.size(); i++) {
+			arrayPiques.get(i).getRectanglePique();
+		}
+		return null;
+	}
 	public void genere() {
 		int[] valeurs = { 10, 35, 58, 90, 140, 190, 220, 260, 298, 299 };
 		

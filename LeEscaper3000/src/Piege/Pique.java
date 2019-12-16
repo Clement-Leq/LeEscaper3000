@@ -20,7 +20,7 @@ public class Pique {
 		this.caseY = 0;
 	}
 
-	public Rectangle getRectanglePerso() {
+	public Rectangle getRectanglePique() {
         float PersoPosX = caseX;
         float PersoPosY = caseY;
         float PersoTailleX = 32;
@@ -29,7 +29,7 @@ public class Pique {
     }
     public void dessinerRectangles(Graphics grphcs) {
         grphcs.setColor(Color.white);
-        Rectangle rectangleProjectile = getRectanglePerso();
+        Rectangle rectangleProjectile = getRectanglePique();
         grphcs.draw(rectangleProjectile);
     }
 	
