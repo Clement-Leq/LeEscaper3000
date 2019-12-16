@@ -25,7 +25,7 @@ public class ListePique {
 	}
 	//genere tous les piques a des position differente
 	public void genere() {
-		int[] valeurs = { 10, 35, 58, 90, 140, 190, 220, 260, 298, 299 };
+		int[] valeurs = { 10, 25, 59, 90, 140, 190, 220, 260, 290, 299 };
 		
 		for (int i = 0; i < 9; i++) {
 			int x = valeurs[i];
