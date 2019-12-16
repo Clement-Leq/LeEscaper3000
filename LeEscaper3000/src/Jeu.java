@@ -8,31 +8,39 @@ import Piege.Pique;
 public class Jeu extends BasicGame{
 	private Character personnage;
 	private Maps map;
-	private ListePique pique;
+	private ListePique listePique;
+	private Pique piques;
 	
 	public Jeu(String title) {
 		super(title);
 		map = new Maps();
 		personnage = new Character();
-		pique = new ListePique();
+		listePique = new ListePique();
+		//piques = new Pique(10*32);
+		//piques = new Pique(9*32); // juste avant l'autre
 	}
 
 	public void render(GameContainer gc, Graphics grphcs){
 		grphcs.translate(-personnage.getImg_caseX()+400, 0);
 		map.renderMap();
-		pique.renderListe(gc, grphcs);
+		
+		listePique.renderListe(gc, grphcs); 
+		//piques.renderPique(gc, grphcs);
 		personnage.renderCharacter(gc, grphcs);
 	}
-
-	public void init(GameContainer gc){
+	
+	public void init(GameContainer gc  ){ // hello hi ils sont supposer apparaitre ou ?
+		//celui qui apparait devant est celui sans la liste ok
 		map.iniMap();
-		pique.genere();
-		pique.initListe(gc);
+		// listePique.genere();
+		listePique.initListe(gc);
+		//piques.initPique(gc);
 		personnage.initCharacter(gc);
 	}
 	
 	public void update(GameContainer gc, int i){
-		pique.updateListe(gc, i, map);
-		personnage.updateCharacter(gc, i, map, pique);
+		listePique.updateListe(gc, i, map);
+		//piques.updatePique(gc, i, map);
+		personnage.updateCharacter(gc, i, map, listePique);
 	}
 }

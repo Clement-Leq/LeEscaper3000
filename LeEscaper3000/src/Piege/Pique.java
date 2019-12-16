@@ -20,8 +20,6 @@ public class Pique {
 		this.caseY = 0;
 	}
 
-
-	
 	public Rectangle getRectanglePerso() {
         float PersoPosX = caseX;
         float PersoPosY = caseY;

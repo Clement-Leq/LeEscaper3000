@@ -141,7 +141,7 @@ public class Character {
 		if(input.isKeyDown(Input.KEY_D) && map.isGrounded((int)(img_caseX+32), (int)(img_caseY), "Sol")) {
 			direction = Direction.RUNRIGHT;
 			AncienneDirection = direction;
-			img_caseX += 10;
+			img_caseX += 20;
 			run_RIGHT.update((long) (i/2.5));
 		}
 		else {
